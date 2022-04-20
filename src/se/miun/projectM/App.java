@@ -26,42 +26,58 @@ public class App {
 
     public static void main(String[] args) {
 
+        // REad XML file
         readFile();
 
 
 // for create object of matrix
         for (var m:mutations) {
-           // nMat.sourceName = m.sourceFile;
-       //   if (numberOfTestsRun > 1)
-            makeMatrix(m);
-         //   System.out.println(m);
+           makeObjectOfMatrix(m);
         }
 
         // for fill allTests
        if (!objectOfMatrix.isEmpty()){
-           for (var obInM: objectOfMatrix) {
-               for (var mut: obInM.testCaseMember) {
-                  if (!allTests.contains(mut)){
-                      allTests.add(mut);
-                      System.out.println(mut);
-                  }
-               }
-           }
+           // Fill unique names
+          fillAlltestsNames();
+           // fill matrix
+          fillOutcomeMatrix();
        }
-       // fill matrix
-        if (!objectOfMatrix.isEmpty()){
-            for (var obInM: objectOfMatrix) {
-                for (var mut: obInM.testCaseMember) {
-                    if (allTests.contains(mut)){
-                       int numb = allTests.indexOf(mut);
-                       // obInM.matrix.get(numb).add(0);
-                    }
-                }
-            }
+        for (var z :
+                objectOfMatrix) {
+            System.out.println(z.getMatrix());
         }
 
     }
 
+    private static void fillOutcomeMatrix() {
+        for (var obInM: objectOfMatrix) {
+            for (var mut: allTests) {
+                if (obInM.testKillingTests.contains(mut)){
+                    obInM.matrix.add(0);
+                } else if (obInM.testSucceedingTests.contains(mut)) {
+                    obInM.matrix.add(1);
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     */
+    private static void fillAlltestsNames() {
+        for (var obInM: objectOfMatrix) {
+            for (var mut: obInM.testKillingTests) {
+                if (!allTests.contains(mut)){
+                    allTests.add(mut);
+                    System.out.println(mut);
+                }
+            }
+        }
+    }
+
+    /**
+     * readFile Method to read XML file and fill ObjectOfMatrix
+     */
     public static void readFile(){
         // Instantiate the Factory
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -81,7 +97,7 @@ public class App {
             doc.getDocumentElement().normalize();
 
             System.out.println("Root Element :" + doc.getDocumentElement().getNodeName());
-            System.out.println("------");
+            //System.out.println("------");
 
             // get <mutation>
             NodeList list = doc.getElementsByTagName("mutation");
@@ -93,22 +109,25 @@ public class App {
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
 
                     Element elementMutate = (Element) node;
-                    mut.id = String.valueOf(numNode +1);
-                    // get staff's attribute
-                    mut.status = elementMutate.getAttribute("status");
+                    // add mutant which has number up 1
+                    if (!elementMutate.getAttribute("numberOfTestsRun").equals("1") && !elementMutate.getAttribute("numberOfTestsRun").equals("0"))
+                    { // get mutant's attribute
+                        mut.setId(String.valueOf(numNode +1));
+                        mut.setStatus(elementMutate.getAttribute("status"));
+                        mut.setNumberOfTestsRun(elementMutate.getAttribute("numberOfTestsRun"));
+                        // get text
+                        mut.setSourceFile(elementMutate.getElementsByTagName("sourceFile").item(0).getTextContent());
+                        mut.setMutatedMethod(elementMutate.getElementsByTagName("mutatedMethod").item(0).getTextContent());
+                        mut.setLineNumber(elementMutate.getElementsByTagName("lineNumber").item(0).getTextContent());
+                        mut.setMutator(elementMutate.getElementsByTagName("mutator").item(0).getTextContent());
+                        mut.setBlock(elementMutate.getElementsByTagName("block").item(0).getTextContent());
+                        mut.setKillingTests(elementMutate.getElementsByTagName("killingTests").item(0).getTextContent());
+                        mut.setSucceedingTests(elementMutate.getElementsByTagName("succeedingTests").item(0).getTextContent());
+                        mut.setDescription(elementMutate.getElementsByTagName("description").item(0).getTextContent());
 
-                    // get text
-                    mut.sourceFile = elementMutate.getElementsByTagName("sourceFile").item(0).getTextContent();
-                    mut.mutatedMethod = elementMutate.getElementsByTagName("mutatedMethod").item(0).getTextContent();
-                    mut.lineNumber = elementMutate.getElementsByTagName("lineNumber").item(0).getTextContent();
-                    mut.mutator = elementMutate.getElementsByTagName("mutator").item(0).getTextContent();
-                    mut.index = elementMutate.getElementsByTagName("index").item(0).getTextContent();
-                    mut.block = elementMutate.getElementsByTagName("block").item(0).getTextContent();
-                    mut.killingTests = elementMutate.getElementsByTagName("killingTests").item(0).getTextContent();
-                    mut.succeedingTests = elementMutate.getElementsByTagName("succeedingTests").item(0).getTextContent();
-                    mut.description = elementMutate.getElementsByTagName("description").item(0).getTextContent();
+                        mutations.add(mut);
+                    }
 
-                    mutations.add(mut);
 
                 }
             }
@@ -119,20 +138,31 @@ public class App {
     }
 
     /**
-     * makeMatrix method to create object of matrix
+     * makeObjectOfMatrix method to create object of matrix
      * @param muta
      */
-    public static void makeMatrix(Mutation muta){
+    public static void makeObjectOfMatrix(Mutation muta){
         MatrixObject nMat = new MatrixObject();
             nMat.sourceName = muta.sourceFile.replace(".java", "");
 
-        String[] arrOfMethodName = muta.killingTests.split("\\|", 20);
+            // Read killingTests String
+        String[] arrOfKilling = muta.killingTests.split("\\|", 20);
         ArrayList<String> nam = new ArrayList<>();
-        for (int l=0; l < arrOfMethodName.length; l++){
-            nam.add(GetNameMethod(arrOfMethodName[l]));
+        for (int l=0; l < arrOfKilling.length; l++){
+            nam.add(GetNameMethod(arrOfKilling[l]));
         }
-        nMat.setTestCaseMember(nam);
-        System.out.println(nam);
+        nMat.setTestKillingTests(nam);
+
+        // Read succeedingTests String
+        ArrayList<String> nams = new ArrayList<>();
+        String[] arrOfSucceeding = muta.succeedingTests.split("\\|", 20);
+        for (int l=0; l < arrOfSucceeding.length; l++){
+            nams.add(GetNameMethod(arrOfSucceeding[l]));
+        }
+        nMat.setTestSucceedingTests(nams);
+        System.out.println(nam + " " + nams);
+
+
         objectOfMatrix.add(nMat);
        //   int startIndex = muta.killingTests.indexOf(")");
          //  nMat.matrix.

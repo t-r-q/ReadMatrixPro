@@ -5,6 +5,7 @@ import java.util.Objects;
 public class Mutation {
     String id;
     String status;
+    String numberOfTestsRun;
     String sourceFile;
     String mutatedMethod;
     String lineNumber;
@@ -18,10 +19,10 @@ public class Mutation {
     public Mutation() {
     }
 
-
-
-    public Mutation(String id, String sourceFile, String mutatedMethod, String lineNumber, String mutator, String index, String block, String killingTests, String succeedingTests, String description) {
+    public Mutation(String id, String status, String numberOfTestsRun, String sourceFile, String mutatedMethod, String lineNumber, String mutator, String index, String block, String killingTests, String succeedingTests, String description) {
         this.id = id;
+        this.status = status;
+        this.numberOfTestsRun = numberOfTestsRun;
         this.sourceFile = sourceFile;
         this.mutatedMethod = mutatedMethod;
         this.lineNumber = lineNumber;
@@ -49,6 +50,9 @@ public class Mutation {
         this.sourceFile = sourceFile;
     }
 
+    public void setNumberOfTestsRun(String numberOfTestsRun) {
+        this.numberOfTestsRun = numberOfTestsRun;
+    }
     public void setMutatedMethod(String mutatedMethod) {
         this.mutatedMethod = mutatedMethod;
     }
@@ -89,7 +93,9 @@ public class Mutation {
     public String getSourceFile() {
         return sourceFile;
     }
-
+    public String getNumberOfTestsRun() {
+        return numberOfTestsRun;
+    }
     public String getMutatedMethod() {
         return mutatedMethod;
     }
@@ -127,12 +133,12 @@ public class Mutation {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Mutation mutation = (Mutation) o;
-        return Objects.equals(id, mutation.id) && Objects.equals(status, mutation.status) && Objects.equals(sourceFile, mutation.sourceFile) && Objects.equals(mutatedMethod, mutation.mutatedMethod) && Objects.equals(lineNumber, mutation.lineNumber) && Objects.equals(mutator, mutation.mutator) && Objects.equals(index, mutation.index) && Objects.equals(block, mutation.block) && Objects.equals(killingTests, mutation.killingTests) && Objects.equals(succeedingTests, mutation.succeedingTests) && Objects.equals(description, mutation.description);
+        return Objects.equals(id, mutation.id) && Objects.equals(status, mutation.status) && Objects.equals(numberOfTestsRun, mutation.numberOfTestsRun) && Objects.equals(sourceFile, mutation.sourceFile) && Objects.equals(mutatedMethod, mutation.mutatedMethod) && Objects.equals(lineNumber, mutation.lineNumber) && Objects.equals(mutator, mutation.mutator) && Objects.equals(index, mutation.index) && Objects.equals(block, mutation.block) && Objects.equals(killingTests, mutation.killingTests) && Objects.equals(succeedingTests, mutation.succeedingTests) && Objects.equals(description, mutation.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, status, sourceFile, mutatedMethod, lineNumber, mutator, index, block, killingTests, succeedingTests, description);
+        return Objects.hash(id, status, numberOfTestsRun, sourceFile, mutatedMethod, lineNumber, mutator, index, block, killingTests, succeedingTests, description);
     }
 
     @Override

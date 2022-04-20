@@ -6,16 +6,18 @@ public class MatrixObject {
     String id;
     String sourceName;
 
-    ArrayList<String> testCaseMember = new ArrayList<>();
+    ArrayList<String> testKillingTests = new ArrayList<>();
+    ArrayList<String> testSucceedingTests = new ArrayList<>();
      ArrayList<Integer> matrix = new ArrayList<>(); // ArrayList<ArrayList<Integer>> matrix = new ArrayList<>();
 
     public MatrixObject() {
     }
 
-    public MatrixObject(String id, String sourceName, ArrayList<String> testCaseMember, ArrayList<Integer> matrix) {
+    public MatrixObject(String id, String sourceName, ArrayList<String> testKillingTests, ArrayList<String> testSucceedingTests, ArrayList<Integer> matrix) {
         this.id = id;
         this.sourceName = sourceName;
-        this.testCaseMember = testCaseMember;
+        this.testKillingTests = testKillingTests;
+        this.testSucceedingTests = testSucceedingTests;
         this.matrix = matrix;
     }
 
@@ -35,12 +37,12 @@ public class MatrixObject {
         this.sourceName = sourceName;
     }
 
-    public ArrayList<String> getTestCaseMember() {
-        return testCaseMember;
+    public ArrayList<String> getTestKillingTests() {
+        return testKillingTests;
     }
 
-    public void setTestCaseMember(ArrayList<String> testCaseMember) {
-        this.testCaseMember = testCaseMember;
+    public void setTestKillingTests(ArrayList<String> testKillingTests) {
+        this.testKillingTests = testKillingTests;
     }
 
     public ArrayList<Integer> getMatrix() {
@@ -49,5 +51,13 @@ public class MatrixObject {
 
     public void setMatrix(ArrayList<Integer> matrix) {
         this.matrix = matrix;
+    }
+
+    public ArrayList<String> getTestSucceedingTests() {
+        return testSucceedingTests;
+    }
+
+    public void setTestSucceedingTests(ArrayList<String> testSucceedingTests) {
+        this.testSucceedingTests = testSucceedingTests;
     }
 }
