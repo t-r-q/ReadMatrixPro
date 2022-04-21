@@ -8,12 +8,12 @@ public class MatrixObject {
 
     ArrayList<String> testKillingTests = new ArrayList<>();
     ArrayList<String> testSucceedingTests = new ArrayList<>();
-     ArrayList<Integer> matrix = new ArrayList<>(); // ArrayList<ArrayList<Integer>> matrix = new ArrayList<>();
-
+     //ArrayList<Integer> matrix = new ArrayList<>(); // ArrayList<ArrayList<Integer>> matrix = new ArrayList<>();
+     ArrayList<String> matrix = new ArrayList<>();
     public MatrixObject() {
     }
 
-    public MatrixObject(String id, String sourceName, ArrayList<String> testKillingTests, ArrayList<String> testSucceedingTests, ArrayList<Integer> matrix) {
+    public MatrixObject(String id, String sourceName, ArrayList<String> testKillingTests, ArrayList<String> testSucceedingTests, ArrayList<String> matrix) {
         this.id = id;
         this.sourceName = sourceName;
         this.testKillingTests = testKillingTests;
@@ -45,11 +45,11 @@ public class MatrixObject {
         this.testKillingTests = testKillingTests;
     }
 
-    public ArrayList<Integer> getMatrix() {
+    public ArrayList<String> getMatrix() {
         return matrix;
     }
 
-    public void setMatrix(ArrayList<Integer> matrix) {
+    public void setMatrix(ArrayList<String> matrix) {
         this.matrix = matrix;
     }
 

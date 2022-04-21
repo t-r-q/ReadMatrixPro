@@ -13,10 +13,12 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class App {
+    // This FILENAME is a Path file for testing only
     private static final String FILENAME = "E:/workshope_projects/PITProjects/New-test-YearAndMonth/target/pit-reports/202204131215/mutations.xml";
-
+  // private static final String FILENAME = "E:/workshope_projects/PITProjects/mutations.xml";
     static ArrayList<Mutation> mutations = new ArrayList<Mutation>();
     static ArrayList<MatrixObject> objectOfMatrix = new ArrayList<>();
 
@@ -42,9 +44,20 @@ public class App {
            // fill matrix
           fillOutcomeMatrix();
        }
-        for (var z :
-                objectOfMatrix) {
-            System.out.println(z.getMatrix());
+        int s=0;
+        for (var z : allTests) {
+           if (s == 0)
+               System.out.print('[');
+            System.out.print(z +", ");
+            if (s == 4)
+                System.out.print(']' + "\n");
+            s++;
+        }
+        int r=0;
+        for (var z : objectOfMatrix) {
+            r++;
+            System.out.println("v" + r+ "   " +z.getMatrix());
+
         }
 
     }
@@ -53,10 +66,11 @@ public class App {
         for (var obInM: objectOfMatrix) {
             for (var mut: allTests) {
                 if (obInM.testKillingTests.contains(mut)){
-                    obInM.matrix.add(0);
+                    obInM.matrix.add("1");
                 } else if (obInM.testSucceedingTests.contains(mut)) {
-                    obInM.matrix.add(1);
-                }
+                    obInM.matrix.add("0");
+                }else
+                    obInM.matrix.add("-");
             }
         }
     }
@@ -67,9 +81,9 @@ public class App {
     private static void fillAlltestsNames() {
         for (var obInM: objectOfMatrix) {
             for (var mut: obInM.testKillingTests) {
-                if (!allTests.contains(mut)){
+                if (!allTests.contains(mut) && !Objects.equals(mut, "")){
                     allTests.add(mut);
-                    System.out.println(mut);
+                //    System.out.println(mut);
                 }
             }
         }
@@ -97,8 +111,9 @@ public class App {
             doc.getDocumentElement().normalize();
 
             System.out.println("Root Element :" + doc.getDocumentElement().getNodeName());
-            //System.out.println("------");
-
+            System.out.println("------** Description **--------");
+            System.out.println("Where is 0 represents that a test passed, whereas 1 represents that a test fails.");
+            System.out.println("Every version (v) is a mutant.");
             // get <mutation>
             NodeList list = doc.getElementsByTagName("mutation");
 
@@ -160,7 +175,7 @@ public class App {
             nams.add(GetNameMethod(arrOfSucceeding[l]));
         }
         nMat.setTestSucceedingTests(nams);
-        System.out.println(nam + " " + nams);
+       // System.out.println(nam + " " + nams);
 
 
         objectOfMatrix.add(nMat);
