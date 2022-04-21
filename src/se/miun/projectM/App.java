@@ -17,7 +17,7 @@ import java.util.Objects;
 
 public class App {
     // This FILENAME is a Path file for testing only
-    private static final String FILENAME = "E:/workshope_projects/PITProjects/New-test-YearAndMonth/target/pit-reports/202204131215/mutations.xml";
+    private static final String FILENAME = "db/mutations.xml";
   // private static final String FILENAME = "E:/workshope_projects/PITProjects/mutations.xml";
     static ArrayList<Mutation> mutations = new ArrayList<Mutation>();
     static ArrayList<MatrixObject> objectOfMatrix = new ArrayList<>();
