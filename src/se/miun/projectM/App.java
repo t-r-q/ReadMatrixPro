@@ -44,21 +44,25 @@ public class App {
            // fill matrix
           fillOutcomeMatrix();
        }
-        int s=0;
-        for (var z : allTests) {
-           if (s == 0)
+
+        for (int r=0; r< allTests.size(); r++) {
+           int l = allTests.get(r).length();
+           l = 20 -l;
                System.out.print('[');
-            System.out.print(z +", ");
-            if (s == 4)
-                System.out.print(']' + "\n");
-            s++;
-        }
-        int r=0;
-        for (var z : objectOfMatrix) {
-            r++;
-            System.out.println("v" + r+ "   " +z.getMatrix());
+            System.out.print(allTests.get(r) +" ");
+            for (; l>=0; l--){
+                System.out.print(" ");
+            }
+
+
+            for (var z : objectOfMatrix) {
+                System.out.print("  " +z.getMatrix().get(r));
+
+            }
+                System.out.println(']');
 
         }
+
 
     }
 
@@ -113,7 +117,7 @@ public class App {
             System.out.println("Root Element :" + doc.getDocumentElement().getNodeName());
             System.out.println("------** Description **--------");
             System.out.println("Where is 0 represents that a test passed, whereas 1 represents that a test fails.");
-            System.out.println("Every version (v) is a mutant.");
+            System.out.println("Every column has version (v) is a mutant.");
             // get <mutation>
             NodeList list = doc.getElementsByTagName("mutation");
 
