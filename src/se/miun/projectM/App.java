@@ -17,8 +17,8 @@ import java.util.Objects;
 
 public class App {
     // This FILENAME is a Path file for testing only
-    private static final String FILENAME = "db/mutations.xml";
-  // private static final String FILENAME = "E:/workshope_projects/PITProjects/mutations.xml";
+    private static final String FILENAME = "db/mutations2.xml";
+  // private static final String FILENAME = "E:/workshope_projects/PITProjects/mutations2.xml";
     static ArrayList<Mutation> mutations = new ArrayList<Mutation>();
     static ArrayList<MatrixObject> objectOfMatrix = new ArrayList<>();
 
@@ -45,23 +45,25 @@ public class App {
           fillOutcomeMatrix();
        }
 
+       // Print out to The Console
         for (int r=0; r< allTests.size(); r++) {
            int l = allTests.get(r).length();
-           l = 20 -l;
+           l = 35 -l; // Space after the name of the class
                System.out.print('[');
             System.out.print(allTests.get(r) +" ");
             for (; l>=0; l--){
                 System.out.print(" ");
             }
 
-
             for (var z : objectOfMatrix) {
                 System.out.print("  " +z.getMatrix().get(r));
 
             }
-                System.out.println(']');
+                System.out.println("]");
 
         }
+
+
 
 
     }
@@ -80,7 +82,7 @@ public class App {
     }
 
     /**
-     *
+     * Fill allTests list with classes names
      */
     private static void fillAlltestsNames() {
         for (var obInM: objectOfMatrix) {
@@ -129,8 +131,8 @@ public class App {
 
                     Element elementMutate = (Element) node;
                     // add mutant which has number up 1
-                    if (!elementMutate.getAttribute("numberOfTestsRun").equals("1") && !elementMutate.getAttribute("numberOfTestsRun").equals("0"))
-                    { // get mutant's attribute
+                 //   if (!elementMutate.getAttribute("numberOfTestsRun").equals("1") && !elementMutate.getAttribute("numberOfTestsRun").equals("0")){
+                     // get mutant's attribute
                         mut.setId(String.valueOf(numNode +1));
                         mut.setStatus(elementMutate.getAttribute("status"));
                         mut.setNumberOfTestsRun(elementMutate.getAttribute("numberOfTestsRun"));
@@ -145,7 +147,7 @@ public class App {
                         mut.setDescription(elementMutate.getElementsByTagName("description").item(0).getTextContent());
 
                         mutations.add(mut);
-                    }
+                 //   }
 
 
                 }

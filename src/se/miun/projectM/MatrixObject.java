@@ -8,7 +8,7 @@ public class MatrixObject {
 
     ArrayList<String> testKillingTests = new ArrayList<>();
     ArrayList<String> testSucceedingTests = new ArrayList<>();
-     //ArrayList<Integer> matrix = new ArrayList<>(); // ArrayList<ArrayList<Integer>> matrix = new ArrayList<>();
+     ArrayList<Double> DISTANCE_MATRIX = new ArrayList<>(); // ArrayList<ArrayList<Integer>> matrix = new ArrayList<>();
      ArrayList<String> matrix = new ArrayList<>();
     public MatrixObject() {
     }
@@ -60,4 +60,5 @@ public class MatrixObject {
     public void setTestSucceedingTests(ArrayList<String> testSucceedingTests) {
         this.testSucceedingTests = testSucceedingTests;
     }
+
 }
