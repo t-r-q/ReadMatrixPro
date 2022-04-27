@@ -52,9 +52,13 @@ public class App {
             createInverseMatrix();
             //Calculation of distances between tests
             CalculateDistances();
+
+            // Linear regression
+
+
         }
 
-/*
+
        // Print out to The Console
         for (int r=0; r< allTests.size(); r++) {
            int l = allTests.get(r).length();
@@ -80,7 +84,7 @@ public class App {
             for (var w : objectOfMatrix) {
                 System.out.println("    " +w.getMatrix());
             }
-        System.out.println("    Inverse Matrix" );
+/*        System.out.println("    Inverse Matrix" );
         for (var w : objectOfMatrix) {
             System.out.println("    " +w.inverseMatrix);
         }
@@ -92,6 +96,7 @@ public class App {
         }
 */
         //  System.out.println("    " +objectOfMatrix.get(0).DISTANCE_MATRIX.size());
+        System.out.println("  ******  DISTANCE MATRIX with MCC  ******");
         for (var z : DISTANCE_MATRIX) {
             for (int c = 0; c < z.length; c++) {
                 System.out.print("  " + z[c]);
@@ -135,7 +140,7 @@ public class App {
 
                 // Calc mcc & Normalize values between 0 and 1
                 double va = MCorrelationCoefficient.calculMCC(X, Y, col);
-                DISTANCE_MATRIX[row][column] = Double.parseDouble(new DecimalFormat("##.###").format((1 - va) / 2));
+                DISTANCE_MATRIX[row][column] = Double.parseDouble(new DecimalFormat("##.#####").format((1 - va) / 2));
             }
         }
       //  System.out.println(Arrays.deepToString(DISTANCE_MATRIX));
@@ -227,7 +232,7 @@ public class App {
 
                     Element elementMutate = (Element) node;
                     // add mutant which has number up 1
-                      if (!elementMutate.getAttribute("numberOfTestsRun").equals("1") && !elementMutate.getAttribute("numberOfTestsRun").equals("0")){
+                //      if (!elementMutate.getAttribute("numberOfTestsRun").equals("1") && !elementMutate.getAttribute("numberOfTestsRun").equals("0")){
                     // get mutant's attribute
                     mut.setId(String.valueOf(numNode + 1));
                     mut.setStatus(elementMutate.getAttribute("status"));
@@ -243,7 +248,7 @@ public class App {
                     mut.setDescription(elementMutate.getElementsByTagName("description").item(0).getTextContent());
 
                     mutations.add(mut);
-                       }
+                //       }
 
 
                 }
