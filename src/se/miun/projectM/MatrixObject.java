@@ -64,6 +64,12 @@ public class MatrixObject {
     }
 
     // ......Find the correlation coefficient between two arrays........
+
+    /**
+     *  Find the correlation coefficient between two arrays
+     *  dmcc = (T P ∗ T N) − (F P ∗ F N) / sqrt p(T P + F P ) × (T P + F N) × (T N + F P ) × (T N + F N)
+     *  WHERE tp = sum_XY
+     */
     public double calculMCC(int X[], int Y[], int n){
 
         int  sum_X = 0, sum_Y = 0, sum_XY = 0, squareSum_X = 0, squareSum_Y = 0;

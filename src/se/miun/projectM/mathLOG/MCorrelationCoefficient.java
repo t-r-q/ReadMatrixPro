@@ -2,40 +2,26 @@ package se.miun.projectM.mathLOG;
 
 public class MCorrelationCoefficient {
 
-    /**
-     *  Find the correlation coefficient between two arrays
-     *  dmcc = (T P ∗ T N) − (F P ∗ F N) / sqrt p(T P + F P ) × (T P + F N) × (T N + F P ) × (T N + F N)
-     *  WHERE tp = sum_XY
-     */
-    public MCorrelationCoefficient() {
-    }
+    public static double calculMCC(int x[], int y[], int n){
+        float sumX = 0;
+        float sumY = 0;
+        float sumXY = 0;
+        float squareSumX2 = 0;
+        float squareSumY2 = 0;
 
-    public double calculMCC(int X[], int Y[], int n){
-
-    int  sum_X = 0, sum_Y = 0, sum_XY = 0, squareSum_X = 0, squareSum_Y = 0;
-
-        for (int i = 0; i < n; i++)
-        {
-            // sum of elements of array X.
-            sum_X = sum_X + X[i];
-
-            // sum of elements of array Y.
-            sum_Y = sum_Y + Y[i];
-
-            // sum of X[i] * Y[i].
-            sum_XY = sum_XY + X[i] * Y[i];
-
-            // sum of square of array elements.
-            squareSum_X = squareSum_X + X[i] * X[i];
-            squareSum_Y = squareSum_Y + Y[i] * Y[i];
+        for (int i = 0; i < n; i++) {
+            sumX += x[i];
+            sumY += y[i];
+            sumXY += x[i] * y[i];
+            squareSumX2 += x[i] * x[i];
+            squareSumY2 += y[i] * y[i];
         }
-        // use formula for calculating correlation coefficient.
-        float mcc = (float)(n * sum_XY - sum_X * sum_Y)/
-                (float)(Math.sqrt((n * squareSum_X -
-                        sum_X * sum_X) * (n * squareSum_Y -
-                        sum_Y * sum_Y)));
 
-        return mcc;
+        final double bottom = Math.sqrt((n * squareSumX2 - sumX * sumX) * (n * squareSumY2 - sumY * sumY));
+        if (bottom == 0)
+            return 0;
+        final double top = n * sumXY - sumX * sumY;
+        return  (top / bottom);
 
     }
 

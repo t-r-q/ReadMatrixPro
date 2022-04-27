@@ -13,7 +13,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class App {
@@ -25,9 +27,10 @@ public class App {
 
     static ArrayList<String> allTests = new ArrayList<>();
 
-   // inverseMatrix
-   static MatrixObject mo = new MatrixObject();
+    // inverseMatrix
+    static MatrixObject mo = new MatrixObject();
     static double[][] DISTANCE_MATRIX;
+
     public static void main(String[] args) {
 
         // REad XML file
@@ -35,21 +38,21 @@ public class App {
 
 
 // for create object of matrix
-        for (var m:mutations) {
-           makeObjectOfMatrix(m);
+        for (var m : mutations) {
+            makeObjectOfMatrix(m);
         }
 
         // for fill allTests
-       if (!objectOfMatrix.isEmpty()){
-           // Fill unique names
-          fillAlltestsNames();
-           // fill matrix List
-          fillOutcomeMatrix();
-          // fill inverse matrix List
-          createInverseMatrix();
-          //Calculation of distances between tests
-          CalculateDistances();
-       }
+        if (!objectOfMatrix.isEmpty()) {
+            // Fill unique names
+            fillAlltestsNames();
+            // fill matrix List
+            fillOutcomeMatrix();
+            // fill inverse matrix List
+            createInverseMatrix();
+            //Calculation of distances between tests
+            CalculateDistances();
+        }
 
 /*
        // Print out to The Console
@@ -87,27 +90,28 @@ public class App {
         for (var z : objectOfMatrix) {
             System.out.println("  " +z.inverseMatrix.size());
         }
-       */
-      //  System.out.println("    " +objectOfMatrix.get(0).DISTANCE_MATRIX.size());
+*/
+        //  System.out.println("    " +objectOfMatrix.get(0).DISTANCE_MATRIX.size());
         for (var z : DISTANCE_MATRIX) {
-           for (int c =0; c < z.length; c++){
-               System.out.print("  " +z[c]);
-           }
+            for (int c = 0; c < z.length; c++) {
+                System.out.print("  " + z[c]);
+            }
             System.out.println("  ");
         }
 
     }
 
     private static void CalculateDistances() {
-       int col  = objectOfMatrix.size();
-       int ro = allTests.size();
+
+        int col = objectOfMatrix.size();
+        int ro = allTests.size();
         DISTANCE_MATRIX = new double[ro][ro];
         int X[] = new int[col];
 
-        for (int row =0; row < allTests.size(); row++) {
-           // fill X array
-            int numX =0;
-            for (var tst1 : objectOfMatrix){
+        for (int row = 0; row < allTests.size(); row++) {
+            // fill X array
+            int numX = 0;
+            for (var tst1 : objectOfMatrix) {
                 if (tst1.inverseMatrix.get(row).equals("0"))
                     X[numX] = 0;
                 else
@@ -115,20 +119,26 @@ public class App {
 
                 numX++;
             }
+
+
             // fill Y array
-            for (int calunm =0; calunm < allTests.size(); calunm++){
+            for (int column = 0; column < allTests.size(); column++) {
                 int Y[] = new int[col];
+                int numY = 0;
                 for (var ror : objectOfMatrix) {
-                    if (ror.matrix.get(calunm).equals("0"))
-                        Y[calunm] = 0;
+                    if (ror.matrix.get(column).equals("0"))
+                        Y[numY] = 0;
                     else
-                        Y[calunm] = 1;
+                        Y[numY] = 1;
+                    numY++;
                 }
+
                 // Calc mcc & Normalize values between 0 and 1
-                DISTANCE_MATRIX[row][calunm] = (1- mo.calculMCC(X, Y, col)/2);
+                double va = MCorrelationCoefficient.calculMCC(X, Y, col);
+                DISTANCE_MATRIX[row][column] = Double.parseDouble(new DecimalFormat("##.###").format((1 - va) / 2));
             }
         }
-
+      //  System.out.println(Arrays.deepToString(DISTANCE_MATRIX));
     }
 
 
@@ -138,15 +148,15 @@ public class App {
      */
     private static void createInverseMatrix() {
         int len = 0;
-        for (var mut: allTests) {
-          for (var obj: objectOfMatrix) {
-              if (obj.testKillingTests.contains(mut)){
-                  obj.inverseMatrix.add("1");
-              } else if (obj.testSucceedingTests.contains(mut)) {
-                  obj.inverseMatrix.add("0");
-              }else
-                  obj.inverseMatrix.add("1");
-          }
+        for (var mut : allTests) {
+            for (var obj : objectOfMatrix) {
+                if (obj.testKillingTests.contains(mut)) {
+                    obj.inverseMatrix.add("1");
+                } else if (obj.testSucceedingTests.contains(mut)) {
+                    obj.inverseMatrix.add("0");
+                } else
+                    obj.inverseMatrix.add("1");
+            }
         }
     }
 
@@ -155,13 +165,13 @@ public class App {
      * Where is 0 represents a test passed, whereas 1 represents that a test fails.
      */
     private static void fillOutcomeMatrix() {
-        for (var obInM: objectOfMatrix) {
-            for (var mut: allTests) {
-                if (obInM.testKillingTests.contains(mut)){
+        for (var obInM : objectOfMatrix) {
+            for (var mut : allTests) {
+                if (obInM.testKillingTests.contains(mut)) {
                     obInM.matrix.add("1");
                 } else if (obInM.testSucceedingTests.contains(mut)) {
                     obInM.matrix.add("0");
-                }else
+                } else
                     obInM.matrix.add("-");
             }
         }
@@ -171,11 +181,11 @@ public class App {
      * Fill allTests list with classes names
      */
     private static void fillAlltestsNames() {
-        for (var obInM: objectOfMatrix) {
-            for (var mut: obInM.testKillingTests) {
-                if (!allTests.contains(mut) && !Objects.equals(mut, "")){
+        for (var obInM : objectOfMatrix) {
+            for (var mut : obInM.testKillingTests) {
+                if (!allTests.contains(mut) && !Objects.equals(mut, "")) {
                     allTests.add(mut);
-                //    System.out.println(mut);
+                    //    System.out.println(mut);
                 }
             }
         }
@@ -184,7 +194,7 @@ public class App {
     /**
      * readFile Method to read XML file and fill ObjectOfMatrix
      */
-    public static void readFile(){
+    public static void readFile() {
         // Instantiate the Factory
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
@@ -217,23 +227,23 @@ public class App {
 
                     Element elementMutate = (Element) node;
                     // add mutant which has number up 1
-                 //   if (!elementMutate.getAttribute("numberOfTestsRun").equals("1") && !elementMutate.getAttribute("numberOfTestsRun").equals("0")){
-                     // get mutant's attribute
-                        mut.setId(String.valueOf(numNode +1));
-                        mut.setStatus(elementMutate.getAttribute("status"));
-                        mut.setNumberOfTestsRun(elementMutate.getAttribute("numberOfTestsRun"));
-                        // get text
-                        mut.setSourceFile(elementMutate.getElementsByTagName("sourceFile").item(0).getTextContent());
-                        mut.setMutatedMethod(elementMutate.getElementsByTagName("mutatedMethod").item(0).getTextContent());
-                        mut.setLineNumber(elementMutate.getElementsByTagName("lineNumber").item(0).getTextContent());
-                        mut.setMutator(elementMutate.getElementsByTagName("mutator").item(0).getTextContent());
-                        mut.setBlock(elementMutate.getElementsByTagName("block").item(0).getTextContent());
-                        mut.setKillingTests(elementMutate.getElementsByTagName("killingTests").item(0).getTextContent());
-                        mut.setSucceedingTests(elementMutate.getElementsByTagName("succeedingTests").item(0).getTextContent());
-                        mut.setDescription(elementMutate.getElementsByTagName("description").item(0).getTextContent());
+                      if (!elementMutate.getAttribute("numberOfTestsRun").equals("1") && !elementMutate.getAttribute("numberOfTestsRun").equals("0")){
+                    // get mutant's attribute
+                    mut.setId(String.valueOf(numNode + 1));
+                    mut.setStatus(elementMutate.getAttribute("status"));
+                    mut.setNumberOfTestsRun(elementMutate.getAttribute("numberOfTestsRun"));
+                    // get text
+                    mut.setSourceFile(elementMutate.getElementsByTagName("sourceFile").item(0).getTextContent());
+                    mut.setMutatedMethod(elementMutate.getElementsByTagName("mutatedMethod").item(0).getTextContent());
+                    mut.setLineNumber(elementMutate.getElementsByTagName("lineNumber").item(0).getTextContent());
+                    mut.setMutator(elementMutate.getElementsByTagName("mutator").item(0).getTextContent());
+                    mut.setBlock(elementMutate.getElementsByTagName("block").item(0).getTextContent());
+                    mut.setKillingTests(elementMutate.getElementsByTagName("killingTests").item(0).getTextContent());
+                    mut.setSucceedingTests(elementMutate.getElementsByTagName("succeedingTests").item(0).getTextContent());
+                    mut.setDescription(elementMutate.getElementsByTagName("description").item(0).getTextContent());
 
-                        mutations.add(mut);
-                 //   }
+                    mutations.add(mut);
+                       }
 
 
                 }
@@ -246,16 +256,17 @@ public class App {
 
     /**
      * makeObjectOfMatrix method to create object of matrix
+     *
      * @param muta
      */
-    public static void makeObjectOfMatrix(Mutation muta){
+    public static void makeObjectOfMatrix(Mutation muta) {
         MatrixObject nMat = new MatrixObject();
-            nMat.sourceName = muta.sourceFile.replace(".java", "");
+        nMat.sourceName = muta.sourceFile.replace(".java", "");
 
-            // Read killingTests String
+        // Read killingTests String
         String[] arrOfKilling = muta.killingTests.split("\\|", 20);
         ArrayList<String> nam = new ArrayList<>();
-        for (int l=0; l < arrOfKilling.length; l++){
+        for (int l = 0; l < arrOfKilling.length; l++) {
             nam.add(GetNameMethod(arrOfKilling[l]));
         }
         nMat.setTestKillingTests(nam);
@@ -263,29 +274,30 @@ public class App {
         // Read succeedingTests String
         ArrayList<String> nams = new ArrayList<>();
         String[] arrOfSucceeding = muta.succeedingTests.split("\\|", 20);
-        for (int l=0; l < arrOfSucceeding.length; l++){
+        for (int l = 0; l < arrOfSucceeding.length; l++) {
             nams.add(GetNameMethod(arrOfSucceeding[l]));
         }
         nMat.setTestSucceedingTests(nams);
-       // System.out.println(nam + " " + nams);
+        // System.out.println(nam + " " + nams);
 
 
         objectOfMatrix.add(nMat);
-       //   int startIndex = muta.killingTests.indexOf(")");
-         //  nMat.matrix.
+        //   int startIndex = muta.killingTests.indexOf(")");
+        //  nMat.matrix.
     }
 
     /**
      * TO get a name of method which has mutated
+     *
      * @param str
      * @return method name
      */
-    public static String GetNameMethod(String str){
+    public static String GetNameMethod(String str) {
         String nm = "";
-        int  endIndex = str.indexOf("(");
-        for (int i = endIndex -1; i > 0; i--){
-            if (str.charAt(i) == '.'){
-                nm = (str.substring(i + 1 , endIndex));
+        int endIndex = str.indexOf("(");
+        for (int i = endIndex - 1; i > 0; i--) {
+            if (str.charAt(i) == '.') {
+                nm = (str.substring(i + 1, endIndex));
                 break;
             }
         }
