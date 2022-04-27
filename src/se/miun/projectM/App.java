@@ -5,6 +5,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import se.miun.projectM.mathLOG.MCorrelationCoefficient;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -17,15 +18,16 @@ import java.util.Objects;
 
 public class App {
     // This FILENAME is a Path file for testing only
-    private static final String FILENAME = "db/mutations2.xml";
-  // private static final String FILENAME = "E:/workshope_projects/PITProjects/mutations2.xml";
-    static ArrayList<Mutation> mutations = new ArrayList<Mutation>();
+    private static final String FILENAME = "db/mutations0.xml";
+
+    static ArrayList<Mutation> mutations = new ArrayList<>();
     static ArrayList<MatrixObject> objectOfMatrix = new ArrayList<>();
 
     static ArrayList<String> allTests = new ArrayList<>();
 
-
-
+   // inverseMatrix
+   static MatrixObject mo = new MatrixObject();
+    static double[][] DISTANCE_MATRIX;
     public static void main(String[] args) {
 
         // REad XML file
@@ -41,10 +43,15 @@ public class App {
        if (!objectOfMatrix.isEmpty()){
            // Fill unique names
           fillAlltestsNames();
-           // fill matrix
+           // fill matrix List
           fillOutcomeMatrix();
+          // fill inverse matrix List
+          createInverseMatrix();
+          //Calculation of distances between tests
+          CalculateDistances();
        }
 
+/*
        // Print out to The Console
         for (int r=0; r< allTests.size(); r++) {
            int l = allTests.get(r).length();
@@ -57,17 +64,96 @@ public class App {
 
             for (var z : objectOfMatrix) {
                 System.out.print("  " +z.getMatrix().get(r));
-
             }
                 System.out.println("]");
 
         }
 
 
+            for (var z : allTests) {
+                System.out.print( z +" ");
+            }
+            System.out.println(" ");
+            for (var w : objectOfMatrix) {
+                System.out.println("    " +w.getMatrix());
+            }
+        System.out.println("    Inverse Matrix" );
+        for (var w : objectOfMatrix) {
+            System.out.println("    " +w.inverseMatrix);
+        }
 
+
+        System.out.println("    " +objectOfMatrix.size());
+        for (var z : objectOfMatrix) {
+            System.out.println("  " +z.inverseMatrix.size());
+        }
+       */
+      //  System.out.println("    " +objectOfMatrix.get(0).DISTANCE_MATRIX.size());
+        for (var z : DISTANCE_MATRIX) {
+           for (int c =0; c < z.length; c++){
+               System.out.print("  " +z[c]);
+           }
+            System.out.println("  ");
+        }
 
     }
 
+    private static void CalculateDistances() {
+       int column  = objectOfMatrix.size();
+       int row = allTests.size();
+        DISTANCE_MATRIX = new double[row][row];
+        int X[] = new int[column];
+
+        for (int clss =0; clss < allTests.size(); clss++) {
+           // fill X array
+            int numX =0;
+            for (var tst1 : objectOfMatrix){
+                if (tst1.inverseMatrix.get(clss).equals("0"))
+                    X[numX] = 0;
+                else
+                    X[numX] = 1;
+
+                numX++;
+            }
+            // fill Y array
+            for (int cl =0; cl < allTests.size(); cl++){
+                int Y[] = new int[column];
+                for (var ro : objectOfMatrix) {
+                    if (ro.inverseMatrix.get(cl).equals("0"))
+                        Y[cl] = 0;
+                    else
+                        Y[cl] = 1;
+                }
+                // call mcc
+                DISTANCE_MATRIX[clss][cl] = (mo.calculMCC(X, Y, column));
+            }
+        }
+
+    }
+
+
+    /**
+     * Create Test Outcome Matrix list from classes tests fill it with (0,1)
+     * Where is 0 represents a test passed, whereas 1 represents that a test fails.
+     */
+    private static void createInverseMatrix() {
+        int len = 0;
+        for (var mut: allTests) {
+          for (var obj: objectOfMatrix) {
+              if (obj.testKillingTests.contains(mut)){
+                  obj.inverseMatrix.add("1");
+              } else if (obj.testSucceedingTests.contains(mut)) {
+                  obj.inverseMatrix.add("0");
+              }else
+                  obj.inverseMatrix.add("1");
+          }
+        }
+    }
+
+    /**
+     * Create Test Outcome Matrix list from classes tests fill it with (0,1)
+     * Where is 0 represents a test passed, whereas 1 represents that a test fails.
+     */
     private static void fillOutcomeMatrix() {
         for (var obInM: objectOfMatrix) {
             for (var mut: allTests) {
