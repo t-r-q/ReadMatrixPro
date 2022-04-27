@@ -4,6 +4,8 @@ public class MCorrelationCoefficient {
 
     /**
      *  Find the correlation coefficient between two arrays
+     *  dmcc = (T P ∗ T N) − (F P ∗ F N) / sqrt p(T P + F P ) × (T P + F N) × (T N + F P ) × (T N + F N)
+     *  WHERE tp = sum_XY
      */
     public MCorrelationCoefficient() {
     }

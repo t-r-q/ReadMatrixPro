@@ -99,16 +99,16 @@ public class App {
     }
 
     private static void CalculateDistances() {
-       int column  = objectOfMatrix.size();
-       int row = allTests.size();
-        DISTANCE_MATRIX = new double[row][row];
-        int X[] = new int[column];
+       int col  = objectOfMatrix.size();
+       int ro = allTests.size();
+        DISTANCE_MATRIX = new double[ro][ro];
+        int X[] = new int[col];
 
-        for (int clss =0; clss < allTests.size(); clss++) {
+        for (int row =0; row < allTests.size(); row++) {
            // fill X array
             int numX =0;
             for (var tst1 : objectOfMatrix){
-                if (tst1.inverseMatrix.get(clss).equals("0"))
+                if (tst1.inverseMatrix.get(row).equals("0"))
                     X[numX] = 0;
                 else
                     X[numX] = 1;
@@ -116,16 +116,16 @@ public class App {
                 numX++;
             }
             // fill Y array
-            for (int cl =0; cl < allTests.size(); cl++){
-                int Y[] = new int[column];
-                for (var ro : objectOfMatrix) {
-                    if (ro.inverseMatrix.get(cl).equals("0"))
-                        Y[cl] = 0;
+            for (int calunm =0; calunm < allTests.size(); calunm++){
+                int Y[] = new int[col];
+                for (var ror : objectOfMatrix) {
+                    if (ror.matrix.get(calunm).equals("0"))
+                        Y[calunm] = 0;
                     else
-                        Y[cl] = 1;
+                        Y[calunm] = 1;
                 }
-                // call mcc
-                DISTANCE_MATRIX[clss][cl] = (mo.calculMCC(X, Y, column));
+                // Calc mcc & Normalize values between 0 and 1
+                DISTANCE_MATRIX[row][calunm] = (1- mo.calculMCC(X, Y, col)/2);
             }
         }
 
