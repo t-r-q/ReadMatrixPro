@@ -11,31 +11,32 @@ import java.util.stream.Collectors;
 
 public class App {
     // This FILENAME is a Path file for testing only
-    //  private static final String FILENAME = "db/mutations0.xml";
-    // private static final String FILENAME = "db/commons-codec.xml";
-     private static final String FILENAME = "db/gameoflife-java.xml";
-    //private static final String FILENAME = "db/algorithms-miscellaneous-6.xml";
-
-
+     private static final String FILENAME = "db/mutations0.xml";
+   //  private static final String FILENAME = "db/commons-codec.xml";
+    // private static final String FILENAME = "db/gameoflife-java.xml"; // 1
+    // private static final String FILENAME = "db/algorithms-miscellaneous-6.xml";
+    //   private static final String FILENAME = "db/game-of-life-mutation-test.xml";
+    //  private static final String FILENAME = "db/jackson-core.xml";
+    // private static final String FILENAME = "db/jsoup.xml";
     static ArrayList<Mutation> mutations = new ArrayList<>();
-    static ArrayList<MatrixObject> objectOfMatrix = new ArrayList<>();
+   // static ArrayList<MatrixObject> objectOfMatrix = new ArrayList<>();
     static ArrayList<MatrixObject> objectOfKilledMutant = new ArrayList<>();
     static ArrayList<String> allTests = new ArrayList<>();
-    static Map<String, Double> testCasesSMAverage = new HashMap<>();
-    static double[][] MATRIX;
-
+    static Map<String, Double> testCasesSMAverageMCC = new HashMap<>();
+    static Map<String, Double> testCasesSMAverageACC = new HashMap<>();
+    static Map<String, Double> testCasesSMAverageFM = new HashMap<>();
+    static Map<String, Double> testCasesSMAverageRANDOM = new HashMap<>();
     static int[][] twentyPercentOfMatrix;
     static int[][] eightyPercentOfMatrix;
     static double[][] DISTANCE_80_MATRIX_MCC;
     static double[][] DISTANCE_80_MATRIX_ACC;
     static double[][] DISTANCE_80_MATRIX_FowlkesMallows;
-    static double[][] DISTANCE_MATRIX_MCC;
 
-    static double[][] DISTANCE_MATRIX_ACC;
 
-    static double[][] DISTANCE_MATRIX_FowlkesMallows;
-    static ArrayList<String> PROIRITISETEST = new ArrayList<>();
-
+   // static double[][] DISTANCE_MATRIX_MCC;
+  //  static ArrayList<String> PROIRITISETEST = new ArrayList<>();
+  //  static double[][] DISTANCE_MATRIX_ACC;
+ //   static double[][] DISTANCE_MATRIX_FowlkesMallows;
    // static LinearRegressionCLASS lr;
 
 
@@ -52,13 +53,31 @@ public class App {
             makeObjectOfKilledMutants(m);
         }
 
-        // for create object of matrix
+  /*      // for create object of matrix
         for (var m : mutations) {
             makeMatrix(m);
         }
-
+*/
         // for fill allTests
-        if (!objectOfMatrix.isEmpty()) {
+        if (!objectOfKilledMutant.isEmpty()){
+            // Fill unique names
+            fillAlltestsNames();
+
+            // fill matrix List
+            fillOutcomeMatrix();
+
+            // division mutations to 20/80
+            split20And80Percent();
+
+            CalculateDistancesForPart();
+
+            // Fill unique names with number of mutation killed
+            fillAlltestsNamesWithCount();
+
+
+        }
+
+    /*    if (!objectOfMatrix.isEmpty()) {
             // Fill unique names
             fillAlltestsNames();
 
@@ -68,29 +87,18 @@ public class App {
 
 
              // fill inverse matrix List
-            createInverseMatrix();
+         //   createInverseMatrix();
 
             //Calculation of distances between tests
-            CalculateDistances();
+           // CalculateDistances();
 
             // Linear regression
             // prioritiseTests();
 
-        }
-
-     if (!objectOfKilledMutant.isEmpty()){
-
-         // division mutations to 20/80
-         split20And80Percent();
-
-         CalculateDistancesForPart();
-
-         // Fill unique names with number of mutation killed
-         fillAlltestsNamesWithCount();
+        }*/
 
 
-      }
-        // Print out to The Console
+// Print out to The Console a Matrix
         for (int r = 0; r < allTests.size(); r++) {
             int l = allTests.get(r).length();
             l = 35 - l; // Space after the name of the class
@@ -100,45 +108,47 @@ public class App {
                 System.out.print(" ");
             }
 
-            for (var z : objectOfMatrix) {
+            for (var z : objectOfKilledMutant) {
                 System.out.print("  " + z.getMatrix().get(r));
             }
             System.out.println("]");
 
         }
-        System.out.println(" *** 20% of MATRIX Which killed mutant *** ");
-        for (int r = 0; r < allTests.size(); r++) {
-            int le = allTests.get(r).length();
+
+// Print 20% of the MATRIX
+        System.out.println("  \n *** 20% of MATRIX Which killed mutant *** ");
+        for (int r1 = 0; r1 < allTests.size(); r1++) {
+            int le = allTests.get(r1).length();
             le = 35 - le; // Space after the name of the class
             System.out.print('[');
-            System.out.print(allTests.get(r) + " ");
+            System.out.print(allTests.get(r1) + " ");
             for (; le >= 0; le--) {
                 System.out.print(" ");
             }
 
             for (int[] percentOfMatrix : twentyPercentOfMatrix) {
-                System.out.print("  " + percentOfMatrix[r]);
+                System.out.print("  " + percentOfMatrix[r1]);
             }
             System.out.println("]");
         }
-
-        System.out.println(" 80% of MATRIX which killed mutant ");
-        for (int r = 0; r < allTests.size(); r++) {
-            int l = allTests.get(r).length();
+// Print 80% of the MATRIX
+        System.out.println(" \n 80% of MATRIX which killed mutant ");
+        for (int r2 = 0; r2 < allTests.size(); r2++) {
+            int l = allTests.get(r2).length();
             l = 35 - l; // Space after the name of the class
             System.out.print('[');
-            System.out.print(allTests.get(r) + " ");
+            System.out.print(allTests.get(r2) + " ");
             for (; l >= 0; l--) {
                 System.out.print(" ");
             }
 
-            for (int p = 0; p < eightyPercentOfMatrix.length; p++) {
-                System.out.print("  " + eightyPercentOfMatrix[p][r]);
+            for (int[] percentOfMatrix : eightyPercentOfMatrix) {
+                System.out.print("  " + percentOfMatrix[r2]);
             }
             System.out.println("]");
         }
 
-
+// Print The MATRIX with MCC
         System.out.println("  --------------- ******  DISTANCE 80% of MATRIX with MCC  ****** ---------------");
         for (int ro = 0; ro < DISTANCE_80_MATRIX_MCC.length; ro++) {//var z : DISTANCE_MATRIX) {
             int l = allTests.get(ro).length();
@@ -151,17 +161,17 @@ public class App {
                 String vl = String.valueOf(DISTANCE_80_MATRIX_MCC[ro][c]);
                 System.out.print("   " + DISTANCE_80_MATRIX_MCC[ro][c]);
                 int li = vl.length();
-                if (li < 5) {
-                    li = 5 - li;
+                if (li < 7) {
+                    li = 7 - li;
                     for (; li > 0; li--) {
                         System.out.print(" ");
                     }
                 }
 
             }
-            System.out.println("");
+            System.out.println();
         }
-
+// Print The MATRIX with ACC
         System.out.println("  --------------- ******  DISTANCE 80% of MATRIX with ACC  ****** ---------------");
         for (int ro = 0; ro < DISTANCE_80_MATRIX_ACC.length; ro++) {
             int l = allTests.get(ro).length();
@@ -174,8 +184,8 @@ public class App {
                 String vl = String.valueOf(DISTANCE_80_MATRIX_ACC[ro][c]);
                 System.out.print("   " + DISTANCE_80_MATRIX_ACC[ro][c]);
                 int li = vl.length();
-                if (li < 5) {
-                    li = 5 - li;
+                if (li < 7) {
+                    li = 7 - li;
                     for (; li > 0; li--) {
                         System.out.print(" ");
                     }
@@ -184,8 +194,8 @@ public class App {
             }
             System.out.println("");
         }
-
-        System.out.println("  --------------- ******  DISTANCE 80% of MATRIX with Fowlkes Mallows  ****** ---------------");
+// Print The MATRIX with FM
+        System.out.println("  --------------- ******  DISTANCE 80% of MATRIX with Fowlkes Mallows  ****** ------");
         for (int ro = 0; ro < DISTANCE_80_MATRIX_FowlkesMallows.length; ro++) {
             int l = allTests.get(ro).length();
 
@@ -198,8 +208,8 @@ public class App {
                 String vl = String.valueOf(DISTANCE_80_MATRIX_FowlkesMallows[ro][c]);
                 System.out.print("   " + DISTANCE_80_MATRIX_FowlkesMallows[ro][c]);
                 int li = vl.length();
-                if (li < 5) {
-                    li = 5 - li;
+                if (li < 7) {
+                    li = 7 - li;
                     for (; li > 0; li--) {
                         System.out.print(" ");
                     }
@@ -207,19 +217,33 @@ public class App {
             }
             System.out.println("");
         }
+
         System.out.println(" ''' TEST PRIORITIZATION based on MCC ''' ");
-        for (String i : testCasesSMAverage.keySet()) {
-            System.out.println("key: " + i + " value: " + testCasesSMAverage.get(i));
+        for (String i : testCasesSMAverageMCC.keySet()) {
+            System.out.println("key: " + i + " VALUE is: " + testCasesSMAverageMCC.get(i));
         }
 
-        for (var el : PROIRITISETEST) {
-            System.out.println(" " + el);
+        System.out.println(" ''' TEST PRIORITIZATION based on ACC ''' ");
+        for (String i : testCasesSMAverageACC.keySet()) {
+            System.out.println("key: " + i + " VALUE is: " + testCasesSMAverageACC.get(i));
+        }
+
+        System.out.println(" ''' TEST PRIORITIZATION based on FM ''' ");
+        for (String i : testCasesSMAverageFM.keySet()) {
+            System.out.println(i + " VALUE is: " + testCasesSMAverageFM.get(i));
         }
 
 
         APFDCalculator APMK = new APFDCalculator();
         // Calculate APMK for 20% of matrix
-        APMK.APFD(testCasesSMAverage, allTests, twentyPercentOfMatrix);
+        System.out.println(" \n  Drawing the APFD for MCC process on the console ");
+        APMK.APFD(testCasesSMAverageMCC, allTests, twentyPercentOfMatrix);
+        System.out.println(" \n  Drawing the APFD for ACC process on the console ");
+        APMK.APFD(testCasesSMAverageACC, allTests, twentyPercentOfMatrix);
+        System.out.println(" \n  Drawing the APFD for FM process on the console ");
+        APMK.APFD(testCasesSMAverageFM, allTests, twentyPercentOfMatrix);
+        System.out.println(" \n  Drawing the APFD for Random process on the console ");
+        APMK.APFD(allTests, twentyPercentOfMatrix);
     }
 static int randomNumber(int max){
         int min =0;
@@ -235,6 +259,7 @@ static int randomNumber(int max){
         eightyPercentOfMatrix = new int[num80][ro];
         int count= 0;
         int x =0;
+      // fill array twentyPercentOfMatrix with 20% random data of test cases
 for ( int limiNum=0; limiNum < num20; limiNum++){
     int sz = objectOfKilledMutant.size();
     int ran = randomNumber(sz);
@@ -248,13 +273,14 @@ for ( int limiNum=0; limiNum < num20; limiNum++){
                 twentyPercentOfMatrix[limiNum][y1] = 0;
             } else {
               //  objectOfKilledMutant.get(ran).matrix.add("-");
-                twentyPercentOfMatrix[limiNum][y1] = 1;
+                twentyPercentOfMatrix[limiNum][y1] = 0;
             }
         y1++;
 
     }
     objectOfKilledMutant.remove(ran);
 }
+        // fill array twentyPercentOfMatrix with 80% from data of test cases
 for(int nm =0; nm < objectOfKilledMutant.size(); nm++){
             int y2 =0;
             for (var mut : allTests) {
@@ -272,14 +298,14 @@ for(int nm =0; nm < objectOfKilledMutant.size(); nm++){
 
               // } else { */
                     if (objectOfKilledMutant.get(nm).testKillingTests.contains(mut)) {
-                        objectOfKilledMutant.get(nm).matrix.add("1");
+                        //objectOfKilledMutant.get(nm).matrix.add("1");
                         eightyPercentOfMatrix[x][y2] = 1;
                     } else if (objectOfKilledMutant.get(nm).testSucceedingTests.contains(mut)) {
-                        objectOfKilledMutant.get(nm).matrix.add("0");
+                      //  objectOfKilledMutant.get(nm).matrix.add("0");
                         eightyPercentOfMatrix[x][y2] = 0;
                     } else {
-                        objectOfKilledMutant.get(nm).matrix.add("-");
-                        eightyPercentOfMatrix[x][y2] = 1;
+                      //  objectOfKilledMutant.get(nm).matrix.add("-");
+                        eightyPercentOfMatrix[x][y2] = 0;
                     }
              //   }
                y2++;
@@ -291,7 +317,7 @@ for(int nm =0; nm < objectOfKilledMutant.size(); nm++){
 
     }
 
-
+/*
     private static void prioritiseTests() throws Exception {
 
         // lr = new LinearRegressionCLASS(MATRIX, DISTANCE_MATRIX);
@@ -311,11 +337,11 @@ for(int nm =0; nm < objectOfKilledMutant.size(); nm++){
         }
         System.out.println(" " + biggerNumber + " row is " + indexRow + " colum is " + indexCol);
     }
-
+*/
     /**
      * Calculate Distances Test cases by ACC, MCC and Fowlkes Mallows
      */
-    private static void CalculateDistances() {
+  /*  private static void CalculateDistances() {
 
 
         int col = objectOfMatrix.size();
@@ -367,11 +393,9 @@ for(int nm =0; nm < objectOfKilledMutant.size(); nm++){
         }
         //  System.out.println(Arrays.deepToString(DISTANCE_MATRIX));
     }
-
+*/
 
     private static void CalculateDistancesForPart() {
-
-
         int col = eightyPercentOfMatrix.length;
         int ro = eightyPercentOfMatrix[0].length;
         // Init all distance matrix.
@@ -413,13 +437,13 @@ for(int nm =0; nm < objectOfKilledMutant.size(); nm++){
                 // Calc mcc & Normalize values between 0 and 1
                 //   double valueMCC = MCorrelationCoefficient.calculMCC(X, Y, col);
                 double valueMCC = ConfusionMatrix.calMCC(X, Y, col);
-                DISTANCE_80_MATRIX_MCC[row][column] = Double.parseDouble(new DecimalFormat("##.#######").format(valueMCC));
+                DISTANCE_80_MATRIX_MCC[row][column] = Double.parseDouble(new DecimalFormat("##.####").format(valueMCC));
                double valueACC = ConfusionMatrix.calACC(X, Y, col);
              //    double valueACC = org.nd4j.evaluation.classification.ConfusionMatrix
-               DISTANCE_80_MATRIX_ACC[row][column] = Double.parseDouble(new DecimalFormat("##.#######").format(valueACC));
+               DISTANCE_80_MATRIX_ACC[row][column] = Double.parseDouble(new DecimalFormat("##.####").format(valueACC));
 
                 double valueFM = ConfusionMatrix.calFowlkesMallows(X, Y, col);
-               DISTANCE_80_MATRIX_FowlkesMallows[row][column] = Double.parseDouble(new DecimalFormat("##.#######").format(valueFM));
+               DISTANCE_80_MATRIX_FowlkesMallows[row][column] = Double.parseDouble(new DecimalFormat("##.####").format(valueFM));
             }
         }
         //  System.out.println(Arrays.deepToString(DISTANCE_MATRIX));
@@ -431,7 +455,7 @@ for(int nm =0; nm < objectOfKilledMutant.size(); nm++){
      */
     private static void createInverseMatrix() {
         for (var mut : allTests) {
-            for (var obj : objectOfMatrix) {
+            for (var obj : objectOfKilledMutant) {
                 if (obj.testKillingTests.contains(mut)) {
                     obj.inverseMatrix.add("1");
                 } else if (obj.testSucceedingTests.contains(mut)) {
@@ -447,7 +471,7 @@ for(int nm =0; nm < objectOfKilledMutant.size(); nm++){
      */
     private static void fillOutcomeMatrix() {
 
-        for (var obInM : objectOfMatrix) {
+        for (var obInM : objectOfKilledMutant) {
             for (var mut : allTests) {
                 if (obInM.testKillingTests.contains(mut)) {
                     obInM.matrix.add("1");
@@ -464,7 +488,7 @@ for(int nm =0; nm < objectOfKilledMutant.size(); nm++){
      * Fill allTests list with classes names
      */
     private static void fillAlltestsNames() {
-        for (var obInM : objectOfMatrix) {
+        for (var obInM : objectOfKilledMutant) {
             for (var mut : obInM.testKillingTests) {
                 if (!allTests.contains(mut) && !Objects.equals(mut, "")) {
                     allTests.add(mut);
@@ -478,25 +502,46 @@ for(int nm =0; nm < objectOfKilledMutant.size(); nm++){
         HashMap<String, Double> temp = new HashMap<>();
        int y =0;
        // Arithmetic average
-        double sma=0;
-       for (int x =0; x < allTests.size(); x++){
-           double average =0;
-           for (int z =0; z < DISTANCE_80_MATRIX_MCC.length; z++){
-               average += DISTANCE_80_MATRIX_MCC[x][z];
-           }
-
-           sma = Double.parseDouble(new DecimalFormat("##.####").format(average / (DISTANCE_80_MATRIX_MCC[x].length -1)));
-
-           temp.put(allTests.get(x), sma);
-       }
+        temp = testCasesSMAverag(DISTANCE_80_MATRIX_MCC);
         temp.entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByKey())
-                .forEachOrdered(x -> testCasesSMAverage.put(x.getKey(), x.getValue()));
-        testCasesSMAverage = sortByValue(temp);
+                .forEachOrdered(x -> testCasesSMAverageMCC.put(x.getKey(), x.getValue()));
+        testCasesSMAverageMCC = sortByValue(temp);
+
+        temp.clear();
+        temp = testCasesSMAverag(DISTANCE_80_MATRIX_ACC);
+        temp.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey())
+                .forEachOrdered(x -> testCasesSMAverageACC.put(x.getKey(), x.getValue()));
+        testCasesSMAverageACC = sortByValue(temp);
+
+        temp.clear();
+        temp = testCasesSMAverag(DISTANCE_80_MATRIX_FowlkesMallows);
+        temp.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey())
+                .forEachOrdered(x -> testCasesSMAverageFM.put(x.getKey(), x.getValue()));
+        testCasesSMAverageFM = sortByValue(temp);
+
         }
-   /*     //
-    }*/
+
+        static HashMap<String, Double> testCasesSMAverag(double[][] arr){
+            HashMap<String, Double> tmp = new HashMap<>();
+            double sma=0;
+            for (int x =0; x < allTests.size(); x++){
+                double average =0;
+                for (int z =0; z < arr.length; z++){
+                    average += arr[x][z];
+                }
+
+                sma = Double.parseDouble(new DecimalFormat("##.####").format(average / (arr[x].length -1)));
+
+                tmp.put(allTests.get(x), sma);
+            }
+            return tmp;
+        }
 
 
     /**
@@ -504,18 +549,14 @@ for(int nm =0; nm < objectOfKilledMutant.size(); nm++){
      *
      * @param muta
      */
-    public static void makeMatrix(Mutation muta) {
+ /*   public static void makeMatrix(Mutation muta) {
         MatrixObject nMat = new MatrixObject();
         nMat.sourceName = muta.sourceFile.replace(".java", "");
-
         // Read killingTests String
         String[] arrOfKilling = muta.killingTests.split("\\|", 20);
         ArrayList<String> nam = new ArrayList<>();
-        for (String value : arrOfKilling) {
-            nam.add(GetNameMethod(value));
-        }
+        for (String value : arrOfKilling) {  nam.add(GetNameMethod(value));        }
         nMat.setTestKillingTests(nam);
-
         // Read succeedingTests String
         ArrayList<String> nams = new ArrayList<>();
         String[] arrOfSucceeding = muta.succeedingTests.split("\\|", 20);
@@ -526,19 +567,15 @@ for(int nm =0; nm < objectOfKilledMutant.size(); nm++){
 
         objectOfMatrix.add(nMat);
     }
-
+*/
     public static void makeObjectOfKilledMutants(Mutation muta) {
         MatrixObject nMat = new MatrixObject();
         nMat.sourceName = muta.sourceFile.replace(".java", "");
-
         // Read killingTests String tag
         String[] arrOfKilling = muta.killingTests.split("\\|", 20);
         ArrayList<String> nam = new ArrayList<>();
-        for (String value : arrOfKilling) {
-            nam.add(GetNameMethod(value));
-        }
+        for (String value : arrOfKilling) {  nam.add(GetNameMethod(value)); }
         nMat.setTestKillingTests(nam);
-
         // Read succeedingTests String
         ArrayList<String> nams = new ArrayList<>();
         String[] arrOfSucceeding = muta.succeedingTests.split("\\|", 20);
@@ -562,7 +599,7 @@ for(int nm =0; nm < objectOfKilledMutant.size(); nm++){
         int endIndex = str.indexOf("(");
         int dot=0;
         for (int i = endIndex - 1; i > 0; i--) {
-            if (str.charAt(i) == '.') {
+            if (str.charAt(i) == '.' || str.charAt(i) == '/') {
                 if (dot >0){
                     nm = (str.substring(i + 1, endIndex));
                     break;
@@ -580,7 +617,6 @@ for(int nm =0; nm < objectOfKilledMutant.size(); nm++){
      * @return HashMap
      */
     public static HashMap<String, Double> sortByValue(HashMap<String, Double> HM) {
-
         return HM.entrySet().stream().sorted((i1, i2) -> i2.getValue().compareTo(i1.getValue())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }
 
