@@ -7,6 +7,7 @@ public class Mutation {
     String status;
     String numberOfTestsRun;
     String sourceFile;
+    String mutatedClassName;
     String mutatedMethod;
     String lineNumber;
     String mutator;
@@ -16,6 +17,9 @@ public class Mutation {
     String succeedingTests;
     String description;
 
+    String mutatedMethodName;
+
+    String mutationType;
     public Mutation() {
     }
 
@@ -32,6 +36,14 @@ public class Mutation {
         this.killingTests = killingTests;
         this.succeedingTests = succeedingTests;
         this.description = description;
+    }
+
+    public Mutation(String mutatedClassName, String mutatedMethodName, String mutatedMethodDescriptionName, String mutatedLineNumber, String mutationType) {
+        this.mutatedClassName = mutatedClassName;
+        this.mutatedMethodName = mutatedMethodName;
+        this.description = mutatedMethodDescriptionName;
+        this.lineNumber = mutatedLineNumber;
+        this.mutationType = mutationType;
     }
 
     public String getStatus() {

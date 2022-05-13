@@ -1,6 +1,10 @@
 package se.miun.projectM.mathLOG;
 
 
+import org.apache.commons.math3.linear.LUDecomposition;
+import org.apache.commons.math3.linear.MatrixUtils;
+import org.apache.commons.math3.linear.RealMatrix;
+
 /**
  *  The LinearRegression class performs a simple linear regression
  *  on an set of n data points (y[i], x[i]).
@@ -14,92 +18,59 @@ package se.miun.projectM.mathLOG;
  *  and the standard deviation of the estimates for the slope and y-intercept.
  */
 public class LinearRegressionCLASS {
-    private final double intercept, slope;
-    private final double r2;
-    private final double svar0, svar1;
+    private RealMatrix w, estimate;
 
     /**
      *
-     * @param x is the predictor variable
-     * @param y is the response variable
+     * @param xArray is the predictor variable
+     * @param yArray is the response variable
      */
-    public LinearRegressionCLASS(double[] x, double[] y) {
-        if (x.length != y.length) {
-            throw new IllegalArgumentException("array lengths are not equal");
-        }
-        int n = x.length;
+    public LinearRegressionCLASS(double [][]xArray, double[][] yArray) throws Exception{
+        applyNormalEquation(MatrixUtils.createRealMatrix(xArray), MatrixUtils.createRealMatrix(yArray));
 
-        // first pass
-        double sumx = 0.0, sumy = 0.0, sumx2 = 0.0;
-        for (int i = 0; i < n; i++) {
-            sumx  += x[i];
-            sumx2 += x[i]*x[i];
-            sumy  += y[i];
-        }
-        double xbar = sumx / n;
-        double ybar = sumy / n;
-
-        // second pass: compute summary statistics
-        double xxbar = 0.0, yybar = 0.0, xybar = 0.0;
-        for (int i = 0; i < n; i++) {
-            xxbar += (x[i] - xbar) * (x[i] - xbar);
-            yybar += (y[i] - ybar) * (y[i] - ybar);
-            xybar += (x[i] - xbar) * (y[i] - ybar);
-        }
-        slope  = xybar / xxbar;
-        intercept = ybar - slope * xbar;
-
-        // more statistical analysis
-        double rss = 0.0;      // residual sum of squares
-        double ssr = 0.0;      // regression sum of squares
-        for (int i = 0; i < n; i++) {
-            double fit = slope*x[i] + intercept;
-            rss += (fit - y[i]) * (fit - y[i]);
-            ssr += (fit - ybar) * (fit - ybar);
-        }
-
-        int degreesOfFreedom = n-2;
-        r2    = ssr / yybar;
-        double svar  = rss / degreesOfFreedom;
-        svar1 = svar / xxbar;
-        svar0 = svar/n + xbar*xbar*svar1;
     }
+    private void applyNormalEquation(RealMatrix x, RealMatrix y) throws Exception {
+        LUDecomposition luDecomposition = new LUDecomposition(x.transpose().multiply(x));
+       if (luDecomposition.getDeterminant()!=0.0){
+           if(luDecomposition.getDeterminant()==0.0) throw new Exception("singular matrix w/ no inverse");
+           else {w = luDecomposition.getSolver().getInverse().multiply(x.transpose().multiply(y));}
+           estimate = x.multiply(w);
+       }
+
+
+    }
+    public double estimateRent(String entry) {
+        return MatrixUtils.createColumnRealMatrix(new double[] {1, Double.valueOf(entry)}).transpose().multiply(w).getData()[0][0];
+    }
+    public RealMatrix getW() {return w;}
+    public RealMatrix getEstimate() { return estimate;}
+
 
     /**
      * Returns the y-intercept alpha of the best of the best-fit line (y = beta * x + alpha).
      */
-    public double intercept() {
-        return intercept;
-    }
+    //public double intercept() {        return intercept;    }
 
     /**
      * Returns the slope &beta; of the best of the best-fit line (y = beta * x + alpha).
      */
-    public double slope() {
-        return slope;
-    }
+   // public double slope() {        return slope;    }
 
     /**
      * Returns the coefficient of determination R<sup>2.
      *         which is a real number between 0 and 1
      */
-    public double R2() {
-        return r2;
-    }
+   // public double R2() {      return r2;    }
 
     /**
      * @return the standard error of the estimate for the intercept
      */
-    public double interceptStdErr() {
-        return Math.sqrt(svar0);
-    }
+   // public double interceptStdErr() {      return Math.sqrt(svar0);    }
 
     /**
     * @return the standard error of the estimate for the slope
      */
-    public double slopeStdErr() {
-        return Math.sqrt(svar1);
-    }
+  //  public double slopeStdErr() {  return Math.sqrt(svar1); }
 
     /**
      * Returns the expected response {@code y} given the value of the predictor
@@ -109,9 +80,7 @@ public class LinearRegressionCLASS {
      * @return the expected response {@code y} given the value of the predictor
      *         variable {@code x}
      */
-    public double predict(double x) {
-        return slope*x + intercept;
-    }
+  //  public double predict(double x) {  return slope*x + intercept; }
 
     /**
      * Returns a string representation of the simple linear regression model.
@@ -120,11 +89,11 @@ public class LinearRegressionCLASS {
      *         including the best-fit line and the coefficient of determination
      *         <em>R</em><sup>2</sup>
      */
-    public String toString() {
+  /*  public String toString() {
         StringBuilder s = new StringBuilder();
         s.append(String.format("%.2f n + %.2f", slope(), intercept()));
         s.append("  (R^2 = " + String.format("%.3f", R2()) + ")");
         return s.toString();
-    }
+    }*/
 
 }
