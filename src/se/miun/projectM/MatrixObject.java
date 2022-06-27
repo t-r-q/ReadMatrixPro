@@ -5,6 +5,8 @@ import java.util.ArrayList;
 public class MatrixObject {
     String id;
     String sourceName;
+    int numberOTR;
+    String mutStatus;
 
     ArrayList<String> testKillingTests = new ArrayList<>();
     ArrayList<String> testSucceedingTests = new ArrayList<>();
@@ -15,8 +17,10 @@ public class MatrixObject {
     public MatrixObject() {
     }
 
-    public MatrixObject(String id, String sourceName, ArrayList<String> testKillingTests, ArrayList<String> testSucceedingTests, ArrayList<String> matrix) {
+    public MatrixObject(String id,int numberOTR ,String mutStatus, String sourceName, ArrayList<String> testKillingTests, ArrayList<String> testSucceedingTests, ArrayList<String> matrix) {
         this.id = id;
+        this.numberOTR = numberOTR;
+        this.mutStatus = mutStatus;
         this.sourceName = sourceName;
         this.testKillingTests = testKillingTests;
         this.testSucceedingTests = testSucceedingTests;

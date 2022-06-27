@@ -2,6 +2,10 @@ package se.miun.projectM.mathLOG;
 
 
 import java.util.*;
+import java.math.BigInteger;
+
+import static java.lang.Double.NaN;
+import static java.lang.Double.isNaN;
 
 
 public class ConfusionMatrix {
@@ -16,24 +20,38 @@ public class ConfusionMatrix {
     public static double calMCC(int x[], int y[], int n){
         float sumX = 0;
         float sumY = 0;
-        float sumXY = 0;
-        float squareSumX2 = 0;
-        float squareSumY2 = 0;
+
+        int tp = 0, tn = 0, fp = 0, fn = 0;
+        double tPfP, tPfN, tNfP, tNfN;
 
         for (int i = 0; i < n; i++) {
             sumX += x[i];
             sumY += y[i];
-            sumXY += x[i] * y[i];
-            squareSumX2 += x[i] * x[i];
-            squareSumY2 += y[i] * y[i];
+            if (x[i] == 0 && y[i] == 0){
+                tn++;
+            } else if (x[i] == 1 && y[i] == 0){
+                fn++;
+            } else if (x[i] == 0 && y[i] == 1){
+                fp++;
+            } else if (x[i] == 1 && y[i] == 1){
+                tp++;
+            }
+        }
+        int upper = (tp * tn) - (fp * fn);
+
+        tPfP = tp + fp;
+        tPfN = tp + fn;
+        tNfP = tn + fp;
+        tNfN = tn + fn;
+
+        double sqe = tPfP * tPfN * tNfP * tNfN;
+        float sqr = (float) Math.sqrt(sqe);
+        float total = ((1 - (upper / sqr)) / 2);
+        if (upper == 0){
+            return 0;
         }
 
-        final double bottom = Math.sqrt((n * squareSumX2 - sumX * sumX) * (n * squareSumY2 - sumY * sumY));
-        if (bottom == 0)
-            return 0;
-         double top = n * sumXY - sumX * sumY;
-        return  ((1 - (top / bottom)) / 2);
-
+        return total;
     }
 
     /**
