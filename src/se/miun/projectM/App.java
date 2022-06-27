@@ -14,11 +14,11 @@ import java.util.stream.Collectors;
 
 public class App {
     // This FILENAME is a Path file for testing only
-    private static final String FILENAME = "db/mutations0.xml";
+    //private static final String FILENAME = "db/mutations0.xml";
     //private static final String FILENAME = "db/game-of-life-mutation-test.xml";
     //private static final String FILENAME = "db/commons-codec.xml";
     //private static final String FILENAME = "db/algorithms-miscellaneous-6.xml";
-    //private static final String FILENAME = "db/jackson-core.xml";
+    private static final String FILENAME = "db/jackson-core.xml";
     //private static final String FILENAME = "db/mp4parser.xml";
     //private static final String FILENAME = "db/jsoup.xml";
     static ArrayList<Mutation> mutations = new ArrayList<>();

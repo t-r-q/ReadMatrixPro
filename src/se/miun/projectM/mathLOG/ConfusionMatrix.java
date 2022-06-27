@@ -47,7 +47,7 @@ public class ConfusionMatrix {
         double sqe = tPfP * tPfN * tNfP * tNfN;
         float sqr = (float) Math.sqrt(sqe);
         float total = ((1 - (upper / sqr)) / 2);
-        if (upper == 0){
+        if (upper == 0 || sqe == 0){
             return 0;
         }
 
