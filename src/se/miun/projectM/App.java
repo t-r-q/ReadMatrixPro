@@ -11,14 +11,15 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-
 public class App {
     // This FILENAME is a Path file for testing only
-    //private static final String FILENAME = "db/mutations0.xml";
+    //private static final String FILENAME = "db/mutations.xml";
+    //private static final String FILENAME = "db/orson-charts.xml";
+    //private static final String FILENAME = "db/commons-cli.xml";
     //private static final String FILENAME = "db/game-of-life-mutation-test.xml";
-    //private static final String FILENAME = "db/commons-codec.xml";
+    private static final String FILENAME = "db/commons-codec.xml";
     //private static final String FILENAME = "db/algorithms-miscellaneous-6.xml";
-    private static final String FILENAME = "db/jackson-core.xml";
+    //private static final String FILENAME = "db/jackson-core.xml";
     //private static final String FILENAME = "db/mp4parser.xml";
     //private static final String FILENAME = "db/jsoup.xml";
     static ArrayList<Mutation> mutations = new ArrayList<>();
@@ -47,7 +48,8 @@ public class App {
 
         // Greate matrix for killed mutants ****
         for (var m : mutations) {
-          if (m.status.equals("KILLED") && Integer.parseInt(m.numberOfTestsRun) > 1)
+            //if (m.status.equals("KILLED") && Integer.parseInt(m.numberOfTestsRun) > 1)
+          if (m.status.equals("KILLED"))
             makeObjectOfKilledMutants(m);
         }
 
@@ -225,7 +227,9 @@ public class App {
         APFDCalculator APMK = new APFDCalculator();
         // Calculate APMK for 20% of matrix
         System.out.println(" \n  Drawing the APFD for MCC process on the console ");
-        APMK.APFD(testCasesSMAverageMCC, allTests, twentyPercentOfMatrix);
+        //APMK.APFD(testCasesSMAverageMCC, allTests, twentyPercentOfMatrix);
+        APMK.APFD(testCasesSMAverageMCC, allTests, eightyPercentOfMatrix);
+
         System.out.println(" \n  Drawing the APFD for ACC process on the console ");
         //APMK.APFD(testCasesSMAverageACC, allTests, twentyPercentOfMatrix);
         System.out.println(" \n  Drawing the APFD for FM process on the console ");
