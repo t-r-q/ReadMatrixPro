@@ -14,14 +14,25 @@ import java.util.stream.Collectors;
 public class App {
     // This FILENAME is a Path file for testing only
     //private static final String FILENAME = "db/mutations.xml";
-    //private static final String FILENAME = "db/orson-charts.xml";
-    //private static final String FILENAME = "db/commons-cli.xml";
-    //private static final String FILENAME = "db/game-of-life-mutation-test.xml";
-    private static final String FILENAME = "db/commons-codec.xml";
+    private static final String FILENAME = "db/orson-charts.xml";  // too cloes but not that bad and its big 2
+    //private static final String FILENAME = "db/commons-cli.xml" ;  **** // bad
+    //private static final String FILENAME = "db/game-of-life-mutation-test.xml";  **** // bad
+    //private static final String FILENAME = "db/commons-codec.xml" //good;
     //private static final String FILENAME = "db/algorithms-miscellaneous-6.xml";
-    //private static final String FILENAME = "db/jackson-core.xml";
-    //private static final String FILENAME = "db/mp4parser.xml";
-    //private static final String FILENAME = "db/jsoup.xml";
+    //private static final String FILENAME = "db/jackson-core.xml";  // too cloes but not that bad and its big 1
+    //private static final String FILENAME = "db/jsoup.xml";  // too cloes
+    //private static final String FILENAME = "db/lstm-from-scratch-java.xml"; // ****** Good
+
+    //private static final String FILENAME = "db/maybe--.xml";   // good
+    //private static final String FILENAME = "db/json.xml";            // ********* Good but only 6 tests
+    //private static final String FILENAME = "db/jaxrs.xml";            // ********* Good
+    //private static final String FILENAME = "db/googlehttpclient.xml";            // ********* Good
+    //private static final String FILENAME = "db/maven-compiler-plugin.xml";            // ********* Good
+
+
+
+
+
     static ArrayList<Mutation> mutations = new ArrayList<>();
    // static ArrayList<MatrixObject> objectOfMatrix = new ArrayList<>();
     static ArrayList<MatrixObject> objectOfKilledMutant = new ArrayList<>();
@@ -287,8 +298,8 @@ public class App {
                 //    double valueACC = org.nd4j.evaluation.classification.ConfusionMatrix
                 DISTANCE_80_MATRIX_ACC[row][column] = Double.parseDouble(new DecimalFormat("##.####").format(valueACC));
 
-                double valueFM = ConfusionMatrix.calFowlkesMallows(X, Y, col);
-                DISTANCE_80_MATRIX_FowlkesMallows[row][column] = Double.parseDouble(new DecimalFormat("##.####").format(valueFM));
+                //double valueFM = ConfusionMatrix.calFowlkesMallows(X, Y, col);
+                //DISTANCE_80_MATRIX_FowlkesMallows[row][column] = Double.parseDouble(new DecimalFormat("##.####").format(valueFM));
             }
         }
     }

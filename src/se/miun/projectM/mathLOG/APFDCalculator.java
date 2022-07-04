@@ -7,13 +7,14 @@ public class APFDCalculator {
         Set<String> nameSet;
         nameSet = testCasesOrder.keySet();
         int divideInPercent = testCasesOrder.size()/10;
+        int getTheFivePercent = testCasesOrder.size()/20;
         ArrayList<String> nameTest = new ArrayList<String>(nameSet);
         int [][] mySetsOfMutantsForAPFD = new int[mutant.length][mutant[0].length];
 
         ArrayList<Integer> TFi = new ArrayList<Integer>();
       int size = mutant.length;
 
-        int count, count1 = 0;
+        int count, count1 = 0, count2 = 0;
         float APFD =0;
 
         for (int x =0; x < testCasesOrder.size(); x++) {
@@ -28,6 +29,8 @@ public class APFDCalculator {
 
         int counti = 0;
         System.out.println("MCC prioritized list!");
+        System.out.println(" If the number of test cases is less than 15, then the result show the " +
+                "number of mutant killed per test.");
         System.out.print( "Test: ");
         int[] tal = new int[mySetsOfMutantsForAPFD[0].length];
         int ones = 0;
@@ -41,16 +44,22 @@ public class APFDCalculator {
                     }
                 }
             }
+            if (count2 == 11)
+                break;
             count1++;
             zeroes = zeroes - ones;
             counti++;
             if (testCasesOrder.size() < 15){
                 System.out.print(ones + " ");
                 zeroes = mySetsOfMutantsForAPFD[0].length;
-            } else if (count1 >= divideInPercent){
+            } else if (count1 >= divideInPercent || count1 == 1 || count1 == getTheFivePercent){
                 float mutantPercent = ((float) 100/mySetsOfMutantsForAPFD[0].length);
+                count2++;
                 System.out.print(ones * mutantPercent + " ");
-                divideInPercent = divideInPercent + testCasesOrder.size()/10;
+                if (count1 != 1){
+                    divideInPercent = divideInPercent + testCasesOrder.size()/10;
+                }
+
             }
         }
         System.out.println(" ");
@@ -94,8 +103,10 @@ public class APFDCalculator {
         int [][] mySetsOfMutants = new int[mutant.length][mutant[0].length];
         ArrayList<Integer> TFi = new ArrayList<Integer>();
         int divideInPercent = testCasesOrder.size()/10;
+        int getTheFivePercent = testCasesOrder.size()/20;
 
-        int count, count1 = 0;
+
+        int count, count1 = 0, count2 = 0;
         float APFD = 0;
         for (int x =0; x < testCasesOrder.size(); x++) {
             for (int i =0; i < testCasesOrder.size(); i++) {
@@ -127,13 +138,18 @@ public class APFDCalculator {
             zeroes = zeroes - ones;
             count1++;
             counti++;
+            if (count2 == 11)
+                break;
             if (testCasesOrder.size() < 15){
                 System.out.print(ones + " ");
                 zeroes = mySetsOfMutants[0].length;
-            } else if (count1 >= divideInPercent){
+            } else if (count1 >= divideInPercent || count1 == 1 || count1 == getTheFivePercent){
                 float mutantPercent = ((float) 100/mySetsOfMutants[0].length);
+                count2++;
                 System.out.print(ones * mutantPercent + " ");
-                divideInPercent = divideInPercent + testCasesOrder.size()/10;
+                if (count1 != 1){
+                    divideInPercent = divideInPercent + testCasesOrder.size()/10;
+                }
             }
         }
         System.out.println(" ");
@@ -148,7 +164,6 @@ public class APFDCalculator {
                 } else {
                     count++;
                 }
-
             }
         }
         double sum = 0;
