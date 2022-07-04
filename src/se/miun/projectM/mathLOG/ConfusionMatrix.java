@@ -62,25 +62,31 @@ public class ConfusionMatrix {
      * @return
      */
     public static double calACC(int x[], int y[], int n){
-         int TPe=0, FNe=0, FPe=0, TNe=0;
+        float sumX = 0;
+        float sumY = 0;
+
+        int tp = 0, tn = 0, fp = 0, fn = 0;
 
         for (int i = 0; i < n; i++) {
-            if(x[i] == 1 && y[i] == 1){
-                TPe++;
-            } else if (x[i] == 0 && y[i] == 1) {
-                FPe++;
-            }else if (x[i] == 1 && y[i] == 0) {
-              FNe++;
-            }else
-              TNe++;
+            sumX += x[i];
+            sumY += y[i];
+            if (x[i] == 0 && y[i] == 0){
+                tn++;
+            } else if (x[i] == 1 && y[i] == 0){
+                fn++;
+            } else if (x[i] == 0 && y[i] == 1){
+                fp++;
+            } else if (x[i] == 1 && y[i] == 1){
+                tp++;
+            }
         }
 
-        final double bottom = (TPe + TNe + FPe + FNe);
+        final double bottom = (tp + tn + fp + fn);
         if (bottom == 0){
             return 0;
         }else {
-            final double top = TPe + TNe;
-            double v = 1-(top / bottom);
+            final double top = tp + tn;
+            double v = 1-( (double) top / bottom);
             return v;
         }
     }
@@ -93,23 +99,30 @@ public class ConfusionMatrix {
      * @return
      */
     public static double calFowlkesMallows(int x[], int y[], int n){
-        int TPf=0, FNf=0, FPf=0, TNf=0;
+        float sumX = 0;
+        float sumY = 0;
+
+        int tp = 0, tn = 0, fp = 0, fn = 0;
 
         for (int i = 0; i < n; i++) {
-            if(x[i] == 1 && y[i] == 1){
-                TPf++;
-            } else if (x[i] == 0 && y[i] == 1) {
-                FPf++;
-            }else if (x[i] == 1 && y[i] == 0) {
-                FNf++;
-            }else
-                TNf++;
+            sumX += x[i];
+            sumY += y[i];
+            if (x[i] == 0 && y[i] == 0){
+                tn++;
+            } else if (x[i] == 1 && y[i] == 0){
+                fn++;
+            } else if (x[i] == 0 && y[i] == 1){
+                fp++;
+            } else if (x[i] == 1 && y[i] == 1){
+                tp++;
+            }
         }
+
         //  precision or PPV is the positive predictive rate
-        double precision = Precision(TPf, FPf);
+        double precision = Precision(tp, fp);
 
         // Recall or TPR is the true positive rate
-        double recall =Recall(TPf, FNf);
+        double recall =Recall(tp, fn);
             double Fm = Math.sqrt(precision * recall);
             return  (1- Fm);
     }

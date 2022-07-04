@@ -13,15 +13,15 @@ import java.util.stream.Collectors;
 
 public class App {
     // This FILENAME is a Path file for testing only
-    //private static final String FILENAME = "db/mutations.xml";
-    private static final String FILENAME = "db/orson-charts.xml";  // too cloes but not that bad and its big 2
+    //private static final String FILENAME = "db/mutations0.xml";
+    //private static final String FILENAME = "db/orson-charts.xml";  // too cloes but not that bad and its big 2
     //private static final String FILENAME = "db/commons-cli.xml" ;  **** // bad
     //private static final String FILENAME = "db/game-of-life-mutation-test.xml";  **** // bad
     //private static final String FILENAME = "db/commons-codec.xml" //good;
     //private static final String FILENAME = "db/algorithms-miscellaneous-6.xml";
     //private static final String FILENAME = "db/jackson-core.xml";  // too cloes but not that bad and its big 1
     //private static final String FILENAME = "db/jsoup.xml";  // too cloes
-    //private static final String FILENAME = "db/lstm-from-scratch-java.xml"; // ****** Good
+    private static final String FILENAME = "db/lstm-from-scratch-java.xml"; // ****** Good
 
     //private static final String FILENAME = "db/maybe--.xml";   // good
     //private static final String FILENAME = "db/json.xml";            // ********* Good but only 6 tests
@@ -115,7 +115,6 @@ public class App {
                 System.out.print(" ");
             }
             int bb = twentyPercentOfMatrix[0].length;
-
             for(int i = 0; i < 1 ; i++)
             {
                 for(int j = 0; j < bb; j++)
@@ -135,7 +134,6 @@ public class App {
             for (; l >= 0; l--) {
                 System.out.print(" ");
             }
-
             int bb = eightyPercentOfMatrix[0].length;
 
             for(int i = 0; i < 1 ; i++)
@@ -174,7 +172,7 @@ public class App {
         }
 // Print The MATRIX with ACC
         System.out.println("  --------------- ******  DISTANCE 80% of MATRIX with ACC  ****** ---------------");
-        /*for (int ro = 0; ro < DISTANCE_80_MATRIX_ACC.length; ro++) {
+        for (int ro = 0; ro < DISTANCE_80_MATRIX_ACC.length; ro++) {
             int l = allTests.get(ro).length();
             l = 40 - l; // Space after the name of the class
             System.out.print(allTests.get(ro));
@@ -194,10 +192,10 @@ public class App {
 
             }
             System.out.println("");
-        }*/
+        }
 // Print The MATRIX with FM
         System.out.println("  --------------- ******  DISTANCE 80% of MATRIX with Fowlkes Mallows  ****** ------");
-        /*for (int ro = 0; ro < DISTANCE_80_MATRIX_FowlkesMallows.length; ro++) {
+        for (int ro = 0; ro < DISTANCE_80_MATRIX_FowlkesMallows.length; ro++) {
             int l = allTests.get(ro).length();
 
             l = 40 - l; // Space after the name of the class
@@ -217,7 +215,7 @@ public class App {
                 }
             }
             System.out.println("");
-        }*/
+        }
 
         System.out.println(" ''' TEST PRIORITIZATION based on MCC ''' ");
         for (String i : testCasesSMAverageMCC.keySet()) {
@@ -225,30 +223,27 @@ public class App {
         }
 
         System.out.println(" ''' TEST PRIORITIZATION based on ACC ''' ");
-        /*for (String i : testCasesSMAverageACC.keySet()) {
+        for (String i : testCasesSMAverageACC.keySet()) {
             System.out.println("key: " + i + " VALUE is: " + testCasesSMAverageACC.get(i));
-        }*/
+        }
 
         System.out.println(" ''' TEST PRIORITIZATION based on FM ''' ");
-        /*for (String i : testCasesSMAverageFM.keySet()) {
+        for (String i : testCasesSMAverageFM.keySet()) {
             System.out.println(i + " VALUE is: " + testCasesSMAverageFM.get(i));
-        }*/
+        }
 
 
         APFDCalculator APMK = new APFDCalculator();
         // Calculate APMK for 20% of matrix
         System.out.println(" \n  Drawing the APFD for MCC process on the console ");
-        //APMK.APFD(testCasesSMAverageMCC, allTests, twentyPercentOfMatrix);
-        APMK.APFD(testCasesSMAverageMCC, allTests, eightyPercentOfMatrix);
-
+        APMK.APFD(testCasesSMAverageMCC, allTests, twentyPercentOfMatrix);
         System.out.println(" \n  Drawing the APFD for ACC process on the console ");
-        //APMK.APFD(testCasesSMAverageACC, allTests, twentyPercentOfMatrix);
+        APMK.APFD(testCasesSMAverageACC, allTests, twentyPercentOfMatrix);
         System.out.println(" \n  Drawing the APFD for FM process on the console ");
-        //APMK.APFD(testCasesSMAverageFM, allTests, twentyPercentOfMatrix);
+        APMK.APFD(testCasesSMAverageFM, allTests, twentyPercentOfMatrix);
         System.out.println(" \n  Drawing the APFD for Random process on the console ");
         //APMK.APFD(allTests, twentyPercentOfMatrix);
     }
-
 
     private static void CalculateDistancesForPart() {
         int col = eightyPercentOfMatrix.length;
@@ -294,12 +289,14 @@ public class App {
 
                 double valueMCC = ConfusionMatrix.calMCC(X, Y, ro);
                 DISTANCE_80_MATRIX_MCC[row][column] = Double.parseDouble(new DecimalFormat("##.####").format(valueMCC));
+
                 double valueACC = ConfusionMatrix.calACC(X, Y, ro);
                 //    double valueACC = org.nd4j.evaluation.classification.ConfusionMatrix
                 DISTANCE_80_MATRIX_ACC[row][column] = Double.parseDouble(new DecimalFormat("##.####").format(valueACC));
 
+                double valueFM = ConfusionMatrix.calFowlkesMallows(X, Y, ro);
                 //double valueFM = ConfusionMatrix.calFowlkesMallows(X, Y, col);
-                //DISTANCE_80_MATRIX_FowlkesMallows[row][column] = Double.parseDouble(new DecimalFormat("##.####").format(valueFM));
+                DISTANCE_80_MATRIX_FowlkesMallows[row][column] = Double.parseDouble(new DecimalFormat("##.####").format(valueFM));
             }
         }
     }
@@ -309,7 +306,6 @@ public class App {
     Random rand = new Random(); //instance of random class
     return rand.nextInt(min, max);
 }
-
 
     private static void split20And80Percent() {
 
@@ -341,7 +337,6 @@ public class App {
                 twentyPercentOfMatrix[y1][limiNum] = 0;
             }
         y1++;
-
     }
     objectOfKilledMutant.remove(ran);
     }
@@ -398,7 +393,6 @@ public class App {
             for (var mut : obInM.testKillingTests) {
                 if (!allTests.contains(mut) && !Objects.equals(mut, "")) {
                     allTests.add(mut);
-                    //    System.out.println(mut);
                 }
             }
         }
@@ -416,7 +410,7 @@ public class App {
         testCasesSMAverageMCC = sortByValue(temp);
 
         temp.clear();
-        /*temp = testCasesSMAverag(DISTANCE_80_MATRIX_ACC);
+        temp = testCasesSMAverag(DISTANCE_80_MATRIX_ACC);
         temp.entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByKey())
@@ -429,7 +423,7 @@ public class App {
                 .stream()
                 .sorted(Map.Entry.comparingByKey())
                 .forEachOrdered(x -> testCasesSMAverageFM.put(x.getKey(), x.getValue()));
-        testCasesSMAverageFM = sortByValue(temp);*/
+        testCasesSMAverageFM = sortByValue(temp);
 
         }
 
