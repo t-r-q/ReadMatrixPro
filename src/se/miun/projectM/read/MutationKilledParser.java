@@ -23,13 +23,9 @@ public class MutationKilledParser {
     public static HashMap<Mutation, Set<String>> mutantMap;
     private static String mutationReportFile;
 
-
-
     public MutationKilledParser(String mutationReportFile, ArrayList<Mutation> mutations) {
         MutationKilledParser.mutationReportFile = mutationReportFile;
         MutationKilledParser.mutations = mutations;
-
-
     }
 
     /**
@@ -54,7 +50,7 @@ public class MutationKilledParser {
             doc.getDocumentElement().normalize();
 
             System.out.println("Root Element :" + doc.getDocumentElement().getNodeName());
-            System.out.println("------** Description **--------");
+            System.out.println("-------------------------------------** Description **--------------------------------" + "\n");
             System.out.println("Where is 0 represents that a test passed, whereas 1 represents that a test fails.");
             System.out.println("Every column has version (v) is a mutant.");
             // get <mutation>
@@ -74,6 +70,7 @@ public class MutationKilledParser {
                     mut.setId(String.valueOf(numNode + 1));
                     mut.setStatus(elementMutate.getAttribute("status"));
                     mut.setNumberOfTestsRun(elementMutate.getAttribute("numberOfTestsRun"));
+
                     // get text
                     mut.setSourceFile(elementMutate.getElementsByTagName("sourceFile").item(0).getTextContent());
                     mut.setMutatedMethod(elementMutate.getElementsByTagName("mutatedMethod").item(0).getTextContent());
@@ -85,7 +82,6 @@ public class MutationKilledParser {
                     mut.setDescription(elementMutate.getElementsByTagName("description").item(0).getTextContent());
 
                     mutations.add(mut);
-                    //   }
 
                     String mutatedClassName = eElement.getElementsByTagName("mutatedClass").item(0).getTextContent();
                     String mutatedMethodName = eElement.getElementsByTagName("mutatedMethod").item(0).getTextContent();
@@ -94,13 +90,9 @@ public class MutationKilledParser {
                     String mutationType = eElement.getElementsByTagName("mutator").item(0).getTextContent();
                     if (elementMutate.getAttribute("status").equals("KILLED")) {
                         Mutation mutant = new Mutation(mutatedClassName, mutatedMethodName, mutatedMethodDescriptionName, mutatedLineNumber, mutationType);
-
                     }
-
-
                 }
             }
-
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
         }

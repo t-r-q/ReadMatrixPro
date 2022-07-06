@@ -3,7 +3,6 @@ import java.util.*;
 
 public class APFDCalculator {
     public void APFD(Map<String, Double> testCasesOrder, ArrayList<String> testNames, int[][] mutant){
-        ArrayList<Integer> posi = new ArrayList<Integer>();
         Set<String> nameSet;
         nameSet = testCasesOrder.keySet();
         int divideInPercent = testCasesOrder.size()/10;
@@ -12,7 +11,6 @@ public class APFDCalculator {
         int [][] mySetsOfMutantsForAPFD = new int[mutant.length][mutant[0].length];
 
         ArrayList<Integer> TFi = new ArrayList<Integer>();
-      int size = mutant.length;
 
         int count, count1 = 0, count2 = 0;
         float APFD =0;
@@ -27,8 +25,6 @@ public class APFDCalculator {
             }
         }
 
-        int counti = 0;
-        System.out.println("MCC prioritized list!");
         System.out.println(" If the number of test cases is less than 15, then the result show the " +
                 "number of mutant killed per test.");
         System.out.print( "Test: ");
@@ -48,7 +44,6 @@ public class APFDCalculator {
                 break;
             count1++;
             zeroes = zeroes - ones;
-            counti++;
             if (testCasesOrder.size() < 15){
                 System.out.print(ones + " ");
                 zeroes = mySetsOfMutantsForAPFD[0].length;
@@ -63,9 +58,6 @@ public class APFDCalculator {
             }
         }
         System.out.println(" ");
-
-
-
 
         for (int x =0; x < mySetsOfMutantsForAPFD[0].length; x++) {
 
@@ -90,26 +82,24 @@ public class APFDCalculator {
 
         APFD = (float) (1 - (sum / (numbFaults * testSize)) + ((float) 1 / (2 * testSize)));
 
-        float random = randomPrioritization( testCasesOrder,  testNames, mutant);
-        System.out.println(" ******************* APFD = " + APFD + " ******* Normal = " + random);
+        //float random = randomPrioritization(testNames, mutant);
+        System.out.println(" ******************* APFD = " + APFD);
     }
 
-    private float randomPrioritization(Map<String, Double> testCasesOrder, ArrayList<String> testNames, int[][] mutant) {
-        ArrayList<Integer> posi = new ArrayList<Integer>();
-        Set<String> nameSet;
-        nameSet = testCasesOrder.keySet();
-        ArrayList<String> nameTest = new ArrayList<String>(nameSet);
+    public void randomPrioritization(ArrayList<String> testNames, int[][] mutant) {
+        ArrayList<String> nameTest = new ArrayList<String>(testNames);
         Collections.shuffle(nameTest);
+        int sizeOfTestSuite = testNames.size();
         int [][] mySetsOfMutants = new int[mutant.length][mutant[0].length];
         ArrayList<Integer> TFi = new ArrayList<Integer>();
-        int divideInPercent = testCasesOrder.size()/10;
-        int getTheFivePercent = testCasesOrder.size()/20;
+        int divideInPercent = sizeOfTestSuite/10;
+        int getTheFivePercent = sizeOfTestSuite/20;
 
 
         int count, count1 = 0, count2 = 0;
         float APFD = 0;
-        for (int x =0; x < testCasesOrder.size(); x++) {
-            for (int i =0; i < testCasesOrder.size(); i++) {
+        for (int x =0; x < sizeOfTestSuite; x++) {
+            for (int i =0; i < sizeOfTestSuite; i++) {
                 if (Objects.equals(nameTest.get(x), testNames.get(i))) {
                     for (int j =0; j < mutant[0].length; j++) {
                         mySetsOfMutants[x][j] = mutant[i][j];
@@ -118,7 +108,6 @@ public class APFDCalculator {
             }
         }
 
-        int counti = 0;
         System.out.println("Random prioritized list.");
         System.out.print( "Test: ");
 
@@ -137,10 +126,9 @@ public class APFDCalculator {
             }
             zeroes = zeroes - ones;
             count1++;
-            counti++;
             if (count2 == 11)
                 break;
-            if (testCasesOrder.size() < 15){
+            if (sizeOfTestSuite < 15){
                 System.out.print(ones + " ");
                 zeroes = mySetsOfMutants[0].length;
             } else if (count1 >= divideInPercent || count1 == 1 || count1 == getTheFivePercent){
@@ -148,7 +136,7 @@ public class APFDCalculator {
                 count2++;
                 System.out.print(ones * mutantPercent + " ");
                 if (count1 != 1){
-                    divideInPercent = divideInPercent + testCasesOrder.size()/10;
+                    divideInPercent = divideInPercent + sizeOfTestSuite/10;
                 }
             }
         }
@@ -174,6 +162,7 @@ public class APFDCalculator {
         int numbFaults = mutant[0].length;
 
         APFD = (float) (1 - (sum / (numbFaults * testSize)) + ((float) 1 / (2 * testSize)));
-        return APFD;
+        System.out.println("************************** Random = " + APFD);
+        //return APFD;
     }
 }

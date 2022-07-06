@@ -1,13 +1,5 @@
 package se.miun.projectM.mathLOG;
 
-
-import java.util.*;
-import java.math.BigInteger;
-
-import static java.lang.Double.NaN;
-import static java.lang.Double.isNaN;
-
-
 public class ConfusionMatrix {
 
     /**
@@ -123,8 +115,11 @@ public class ConfusionMatrix {
 
         // Recall or TPR is the true positive rate
         double recall =Recall(tp, fn);
-            double Fm = Math.sqrt(precision * recall);
-            return  (1- Fm);
+        double Fm = Math.sqrt(precision * recall);
+        if (Fm == 2){
+            int ss = 2;
+        }
+        return  ((double) (1- Fm) / 2);
     }
 
     /**

@@ -1,14 +1,10 @@
 package se.miun.projectM;
 
-
 import se.miun.projectM.mathLOG.APFDCalculator;
 import se.miun.projectM.mathLOG.ConfusionMatrix;
 import se.miun.projectM.read.MutationKilledParser;
-import java.lang.Object;
-
 import java.text.DecimalFormat;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class App {
@@ -16,35 +12,28 @@ public class App {
     //private static final String FILENAME = "db/mutations0.xml";
     //private static final String FILENAME = "db/orson-charts.xml";  // too cloes but not that bad and its big 2
     //private static final String FILENAME = "db/commons-cli.xml" ;  **** // bad
-    //private static final String FILENAME = "db/game-of-life-mutation-test.xml";  **** // bad
-    //private static final String FILENAME = "db/commons-codec.xml" //good;
-    //private static final String FILENAME = "db/algorithms-miscellaneous-6.xml";
+    //private static final String FILENAME = "db/commons-codec.xml"; //good
+    private static final String FILENAME = "db/algorithms-miscellaneous-6.xml";
     //private static final String FILENAME = "db/jackson-core.xml";  // too cloes but not that bad and its big 1
     //private static final String FILENAME = "db/jsoup.xml";  // too cloes
-    private static final String FILENAME = "db/lstm-from-scratch-java.xml"; // ****** Good
+    //private static final String FILENAME = "db/lstm-from-scratch-java.xml"; // ****** Good
 
-    //private static final String FILENAME = "db/maybe--.xml";   // good
+    //private static final String FILENAME = "db/mock.xml";   // good
     //private static final String FILENAME = "db/json.xml";            // ********* Good but only 6 tests
     //private static final String FILENAME = "db/jaxrs.xml";            // ********* Good
     //private static final String FILENAME = "db/googlehttpclient.xml";            // ********* Good
     //private static final String FILENAME = "db/maven-compiler-plugin.xml";            // ********* Good
 
 
-
-
-
     static ArrayList<Mutation> mutations = new ArrayList<>();
-   // static ArrayList<MatrixObject> objectOfMatrix = new ArrayList<>();
     static ArrayList<MatrixObject> objectOfKilledMutant = new ArrayList<>();
     static ArrayList<MatrixObject> objectOfKilledMutantCopy = new ArrayList<>();
     static ArrayList<String> allTests = new ArrayList<>();
     static Map<String, Double> testCasesSMAverageMCC = new HashMap<>();
     static Map<String, Double> testCasesSMAverageACC = new HashMap<>();
     static Map<String, Double> testCasesSMAverageFM = new HashMap<>();
-    static Map<String, Double> testCasesSMAverageRANDOM = new HashMap<>();
     static int[][] twentyPercentOfMatrix;
     static int[][] eightyPercentOfMatrix;
-
     static double[][] DISTANCE_80_MATRIX_MCC;
     static double[][] DISTANCE_80_MATRIX_ACC;
     static double[][] DISTANCE_80_MATRIX_FowlkesMallows;
@@ -59,7 +48,6 @@ public class App {
 
         // Greate matrix for killed mutants ****
         for (var m : mutations) {
-            //if (m.status.equals("KILLED") && Integer.parseInt(m.numberOfTestsRun) > 1)
           if (m.status.equals("KILLED"))
             makeObjectOfKilledMutants(m);
         }
@@ -78,15 +66,13 @@ public class App {
 
             CalculateDistancesForPart();
 
-            //CalculateDistancesForPart11111();
-
             // Fill unique names with number of mutation killed
             fillAlltestsNamesWithCount();
 
 
         }
 
-// Print out to The Console a Matrix
+        // Print out to The Console a Matrix
         for (int r = 0; r < allTests.size(); r++) {
             int l = allTests.get(r).length();
             l = 35 - l; // Space after the name of the class
@@ -103,7 +89,7 @@ public class App {
 
         }
 
-// Print 20% of the MATRIX
+        // Print the 20% of the MATRIX
         System.out.println("  \n *** 20% of MATRIX Which killed mutant *** ");
 
         for (int r1 = 0; r1 < allTests.size(); r1++) {
@@ -242,7 +228,7 @@ public class App {
         System.out.println(" \n  Drawing the APFD for FM process on the console ");
         APMK.APFD(testCasesSMAverageFM, allTests, twentyPercentOfMatrix);
         System.out.println(" \n  Drawing the APFD for Random process on the console ");
-        //APMK.APFD(allTests, twentyPercentOfMatrix);
+        APMK.randomPrioritization(allTests, twentyPercentOfMatrix);
     }
 
     private static void CalculateDistancesForPart() {
@@ -291,11 +277,9 @@ public class App {
                 DISTANCE_80_MATRIX_MCC[row][column] = Double.parseDouble(new DecimalFormat("##.####").format(valueMCC));
 
                 double valueACC = ConfusionMatrix.calACC(X, Y, ro);
-                //    double valueACC = org.nd4j.evaluation.classification.ConfusionMatrix
                 DISTANCE_80_MATRIX_ACC[row][column] = Double.parseDouble(new DecimalFormat("##.####").format(valueACC));
 
                 double valueFM = ConfusionMatrix.calFowlkesMallows(X, Y, ro);
-                //double valueFM = ConfusionMatrix.calFowlkesMallows(X, Y, col);
                 DISTANCE_80_MATRIX_FowlkesMallows[row][column] = Double.parseDouble(new DecimalFormat("##.####").format(valueFM));
             }
         }
