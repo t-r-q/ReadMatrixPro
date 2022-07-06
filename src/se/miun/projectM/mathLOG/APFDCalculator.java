@@ -81,8 +81,6 @@ public class APFDCalculator {
         int numbFaults = mutant[0].length;
 
         APFD = (float) (1 - (sum / (numbFaults * testSize)) + ((float) 1 / (2 * testSize)));
-
-        //float random = randomPrioritization(testNames, mutant);
         System.out.println(" ******************* APFD = " + APFD);
     }
 
@@ -163,6 +161,5 @@ public class APFDCalculator {
 
         APFD = (float) (1 - (sum / (numbFaults * testSize)) + ((float) 1 / (2 * testSize)));
         System.out.println("************************** Random = " + APFD);
-        //return APFD;
     }
 }
