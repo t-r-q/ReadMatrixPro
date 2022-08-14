@@ -14,7 +14,7 @@ public class App {
     //private static final String FILENAME = "db/commons-cli.xml" ;  **** // bad
     //private static final String FILENAME = "db/commons-codec.xml"; //good
     //private static final String FILENAME = "db/algorithms-miscellaneous-6.xml";
-    //private static final String FILENAME = "db/jackson-core.xml";  // too cloes but not that bad and its big 1
+    private static final String FILENAME = "db/jackson-core.xml";  // too cloes but not that bad and its big 1
     //private static final String FILENAME = "db/jsoup.xml";  // too cloes
     //private static final String FILENAME = "db/lstm-from-scratch-java.xml"; // ****** Good
 
@@ -22,7 +22,7 @@ public class App {
     //private static final String FILENAME = "db/json.xml";            // ********* Good but only 6 tests
     //private static final String FILENAME = "db/jaxrs.xml";            // ********* Good
     //private static final String FILENAME = "db/googlehttpclient.xml";            // ********* Good
-    private static final String FILENAME = "db/maven-compiler-plugin.xml";            // ********* Good
+    //private static final String FILENAME = "db/maven-compiler-plugin.xml";            // ********* Good
 
 
     static ArrayList<Mutation> mutations = new ArrayList<>();
